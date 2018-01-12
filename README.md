@@ -1,3 +1,3 @@
 # lowg
 
-Rendering engine written in C
+Simple rendering engine written in C
