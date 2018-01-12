@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glad/glad.h>
+#include "utils.h"
 
-char* uRead(char *path, unsigned int num_chars)
+char* file_read(char *path, unsigned int num_chars)
 {
 	FILE* f;
 	char* con = malloc(sizeof(char) + num_chars);
@@ -41,7 +42,7 @@ void create_shader(int *shader, const int type, char* source_path, unsigned int 
 		*shader = glCreateShader(GL_FRAGMENT_SHADER);
 	}
 
-	const char* shader_source = uRead(source_path, length);
+	const char* shader_source = file_read(source_path, length);
 	glShaderSource(*shader, 1, &shader_source, NULL);
 	glCompileShader(*shader);
 

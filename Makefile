@@ -1,15 +1,14 @@
 CC = gcc
-
 OUT = main
 
 CFLAGS = -Wall
 
-SRC =$(wildcard src/*.c)
+SRC = $(wildcard src/*.c)
 SRC += $(wildcard lib/*.c)
 OBJS = $(SRC:.c=.o)
 
-CFLAGS = -I lib
-CFLAGS += -I src
+CFLAGS = -Ilib
+CFLAGS += -Isrc
 CFLAGS += `pkg-config --cflags glfw3`
 
 LDFLAGS = -L lib
@@ -20,9 +19,10 @@ all: $(OUT)
 $(OUT): $(OBJS)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-.PHONY: clean
+%.o: %.c
+	$(CC) $< -c -o $@ $(CFLAGS)
 
 clean:
 	rm $(OUT) $(OBJS)
 
-#gcc -I include `pkg-config --cflags glfw3` -o main src/main.c lib/glad.c `pkg-config --static --libs glfw3`
+.PHONY: clean
