@@ -1,5 +1,6 @@
 # object files
 *.o
+*.swp
 
 # main executable
 main
