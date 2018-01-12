@@ -5,6 +5,7 @@
 #include "utils.h"
 #include "renderer.h"
 #include "mat4.h"
+#include "vec3.h"
 
 #define WIDTH 600
 #define HEIGHT 400
