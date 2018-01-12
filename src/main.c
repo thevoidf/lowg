@@ -80,7 +80,8 @@ int main()
 	glUniformMatrix4fv(view_location, 1, GL_FALSE, view);
 	glUniformMatrix4fv(model_location, 1, GL_FALSE, model);
 
-	begin_triangle(vertices, sizeof(vertices), vertex_shader, fragment_shader);
+	begin_triangle(vertices, sizeof(vertices));
+	// begin_rectangle(vertices, sizeof(vertices), indices, sizeof(indices), vertex_shader, fragment_shader);
 
 	while (!glfwWindowShouldClose(window)) {
 		process_input(window);
@@ -104,7 +105,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-void process_input(GLFWwindow *window) {
+void process_input(GLFWwindow *window)
+{
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, 1);
 	}

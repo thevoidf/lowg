@@ -6,7 +6,7 @@ const unsigned int TYPE_TRIANGLE = 0;
 const unsigned int TYPE_RECTANGLE = 1;
 
 void begin_triangle
-(float* vertices, unsigned int size, int vertex_shader, int fragment_shader)
+(float* vertices, unsigned int size)
 {
   glGenVertexArrays(1, &vao);
   glGenBuffers(1, &vbo);
