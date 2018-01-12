@@ -2,10 +2,10 @@
 #include <stdio.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "utils.h"
 #include "renderer.h"
 #include "mat4.h"
 #include "vec3.h"
+#include "shader.h"
 
 #define WIDTH 600
 #define HEIGHT 400
@@ -35,15 +35,9 @@ int main()
 		return -1;
 	}
 
-	int vertex_shader;
-	create_shader(&vertex_shader, GL_VERTEX_SHADER, "assets/shaders/shader.vert", 0);
-
-	int fragment_shader;
-	create_shader(&fragment_shader, GL_FRAGMENT_SHADER, "assets/shaders/shader.frag", 0);
-
-	int shader_program;
-	create_program(&shader_program, vertex_shader, fragment_shader);
-	glUseProgram(shader_program);
+	GLuint shader;
+	create_shader_porgram(&shader, "assets/shaders/shader.vert", "assets/shaders/shader.frag");
+	shader_enable(shader);
 
 	// vertex data
 	float vertices[] = {
@@ -64,17 +58,20 @@ int main()
 
 	// begin_rectangle(vertices, sizeof(vertices), indices, sizeof(indices), vertex_shader, fragment_shader);
 
-	int projection_location = glGetUniformLocation(shader_program, "pr");
-	int view_location = glGetUniformLocation(shader_program, "view");
-	int model_location = glGetUniformLocation(shader_program, "model");
+	int projection_location = glGetUniformLocation(shader, "pr");
+	int view_location = glGetUniformLocation(shader, "view");
+	int model_location = glGetUniformLocation(shader, "model");
 
 	float pr[4*4];
 	float view[4*4];
 	float model[4*4];
 
-	proj(pr, 45.0f, (float) WIDTH/HEIGHT, 0.1f, 100.0f);
+	perspective(pr, 45.0f, (float) WIDTH/HEIGHT, 0.1f, 100.0f);
 	translate(view, 0.0f, 0.0f, -1.0f);
-	translate(model, 0.0f, 0.0f, 0.0f);
+	// translate(model, 0.0f, 0.0f, 0.0f);
+	
+	vec3 axis = { 0.0f, 0.0f, 1.0f };
+	rotate(model, 30.0f, axis);
 
 	glUniformMatrix4fv(projection_location, 1, GL_FALSE, pr);
 	glUniformMatrix4fv(view_location, 1, GL_FALSE, view);
@@ -95,6 +92,8 @@ int main()
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
+	shader_disable(shader);
 
 	glfwTerminate();
 	return 0;
