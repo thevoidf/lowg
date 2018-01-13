@@ -7,7 +7,7 @@ float to_radians(float deg)
 	return (float) (deg * (M_PI / 180.0f));
 }
 
-void identity(float elements[])
+void mat4_identity(float elements[])
 {
 	int i;
 	for (i = 0; i < 4*4; i++)
@@ -19,14 +19,13 @@ void identity(float elements[])
 	elements[3 + 3 * 4] = 1.0f;
 }
 
-void
-perspective(float elements[],
+void mat4_perspective(float elements[],
 		float fov,
 		float aspect_ratio,
 		float near,
 		float far)
 {
-	identity(elements);
+	mat4_identity(elements);
 
 	float q = 1.0f / tan(to_radians(0.5f * fov));
 	float a = q / aspect_ratio;
@@ -42,18 +41,18 @@ perspective(float elements[],
 }
 
 void
-translate(float elements[], float x, float y, float z)
+mat4_translate(float elements[], float x, float y, float z)
 {
-	identity(elements);
+	mat4_identity(elements);
 
 	elements[0 + 3 * 4] = x;
 	elements[1 + 3 * 4] = y;
 	elements[2 + 3 * 4] = z;
 }
 
-void rotate(float elements[], float angle, vec3 axis)
+void mat4_rotate(float elements[], float angle, vec3 axis)
 {
-	identity(elements);
+	mat4_identity(elements);
 
 	float r = to_radians(angle);
 	float c = cos(r);

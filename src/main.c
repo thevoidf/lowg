@@ -66,15 +66,15 @@ int main()
 	float view[4*4];
 	float model[4*4];
 
-	perspective(pr, 45.0f, (float) WIDTH/HEIGHT, 0.1f, 100.0f);
-	translate(view, 0.0f, 0.0f, -1.0f);
+	mat4_perspective(pr, 45.0f, (float) WIDTH/HEIGHT, 0.1f, 100.0f);
+	mat4_translate(view, 0.0f, 0.0f, -1.0f);
 	
 	float mat1[4*4];
 	float mat2[4*4];
 
 	vec3 axis = { 1.0f, 0.0f, 0.0f };
-	translate(mat1, 0.4f, 0.0f, 0.0f);
-	rotate(mat2, 60.0f, axis);
+	mat4_translate(mat1, 0.4f, 0.0f, 0.0f);
+	mat4_rotate(mat2, 60.0f, axis);
 	mat4_multiply(model, mat1, mat2);
 
 	mat4_print(model);
