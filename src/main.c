@@ -36,7 +36,7 @@ int main()
 	}
 
 	GLuint shader;
-	create_shader_porgram(&shader, "assets/shaders/shader.vert", "assets/shaders/shader.frag");
+	shader_create_shader_program(&shader, "assets/shaders/shader.vert", "assets/shaders/shader.frag");
 	shader_enable(shader);
 
 	// vertex data

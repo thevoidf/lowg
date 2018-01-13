@@ -2,7 +2,7 @@
 #include "shader.h"
 #include "utils.h"
 
-void create_shader(GLuint *shader, const int type, const char* source_path)
+void shader_create(GLuint *shader, const int type, const char* source_path)
 {
 	int success;
 	char info_log[512];
@@ -24,7 +24,7 @@ void create_shader(GLuint *shader, const int type, const char* source_path)
 	}
 }
 
-void create_program(GLuint *shader_program, GLuint vertex_shader, GLuint fragment_shader)
+void shader_create_program(GLuint *shader_program, GLuint vertex_shader, GLuint fragment_shader)
 {
 	int success;
 	char info_log[512];
@@ -43,15 +43,15 @@ void create_program(GLuint *shader_program, GLuint vertex_shader, GLuint fragmen
 	glDeleteShader(fragment_shader);
 }
 
-void create_shader_porgram(GLuint *shader_id, const char* vert_path, const char* frag_path)
+void shader_create_shader_program(GLuint *shader_id, const char* vert_path, const char* frag_path)
 {
   GLuint vertex_shader;
   GLuint fragment_shader;
 
-	create_shader(&vertex_shader, GL_VERTEX_SHADER, vert_path);
-	create_shader(&fragment_shader, GL_FRAGMENT_SHADER, frag_path);
+	shader_create(&vertex_shader, GL_VERTEX_SHADER, vert_path);
+	shader_create(&fragment_shader, GL_FRAGMENT_SHADER, frag_path);
 
-	create_program(shader_id, vertex_shader, fragment_shader);
+	shader_create_program(shader_id, vertex_shader, fragment_shader);
 }
 
 void shader_enable(GLuint shader_id)
