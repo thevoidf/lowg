@@ -17,7 +17,8 @@ perspective(float elements[],
 		float far);
 
 void translate(float elements[], float x, float y, float z);
-
 void rotate(float elements[], float angle, vec3 axis);
+void mat4_multiply(float res[], float mat1[], float mat2[]);
+void mat4_print(float mat[]);
 
 #endif

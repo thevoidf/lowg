@@ -68,10 +68,16 @@ int main()
 
 	perspective(pr, 45.0f, (float) WIDTH/HEIGHT, 0.1f, 100.0f);
 	translate(view, 0.0f, 0.0f, -1.0f);
-	// translate(model, 0.0f, 0.0f, 0.0f);
 	
-	vec3 axis = { 0.0f, 0.0f, 1.0f };
-	rotate(model, 30.0f, axis);
+	float mat1[4*4];
+	float mat2[4*4];
+
+	vec3 axis = { 1.0f, 0.0f, 0.0f };
+	translate(mat1, 0.4f, 0.0f, 0.0f);
+	rotate(mat2, 60.0f, axis);
+	mat4_multiply(model, mat1, mat2);
+
+	mat4_print(model);
 
 	glUniformMatrix4fv(projection_location, 1, GL_FALSE, pr);
 	glUniformMatrix4fv(view_location, 1, GL_FALSE, view);

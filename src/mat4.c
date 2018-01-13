@@ -1,5 +1,6 @@
 #include <math.h>
 #include "mat4.h"
+#include <stdio.h>
 
 float to_radians(float deg)
 {
@@ -63,15 +64,43 @@ void rotate(float elements[], float angle, vec3 axis)
 	float y = axis.y;
 	float z = axis.z;
 
-	elements[0 + 0 * 4] = x * omc + c;
-	elements[1 + 0 * 4] = y * x * omc + z * s;
-	elements[2 + 0 * 4] = x * z * omc - y * s;
+	elements[0 + 0 * 4] = x * x * omc + c;
+	elements[0 + 1 * 4] = y * x * omc + z * s;
+	elements[0 + 2 * 4] = x * z * omc - y * s;
 
-	elements[0 + 1 * 4] = x * y * omc - z * s;
-	elements[1 + 1 * 4] = y * omc + c;
-	elements[2 + 1 * 4] = y * z * omc + x * s;
+	elements[1 + 0 * 4] = x * y * omc - z * s;
+	elements[1 + 1 * 4] = y * y * omc + c;
+	elements[1 + 2 * 4] = y * z * omc + x * s;
 
-	elements[0 + 2 * 4] = x * z * omc + y * s;
-	elements[1 + 2 * 4] = y * z * omc - x * s;
-	elements[2 + 2 * 4] = z * omc + c;
+	elements[2 + 0 * 4] = x * z * omc + y * s;
+	elements[2 + 1 * 4] = y * z * omc - x * s;
+	elements[2 + 2 * 4] = z * z * omc + c;
 }
+
+void mat4_multiply(float res[], float mat1[], float mat2[])
+{
+	int row, col, e;
+
+	for (col = 0; col < 4; col++) {
+		for (row = 0; row < 4; row++) {
+			float sum = 0.0f;
+			for (e = 0; e < 4; e++) {
+				sum += mat1[e + row * 4] * mat2[col + e * 4];
+			}
+			res[col + row * 4] = sum;
+		}
+	}
+}
+
+void mat4_print(float mat[])
+{
+	int i, row, col;
+
+	for (col = 0; col < 4; col++) {
+		for (row = 0; row < 4; row++) {
+			printf("%0.2f, ", mat[col + row * 4]);
+		}
+		printf("\n");
+	}
+}
+
