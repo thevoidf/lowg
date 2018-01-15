@@ -45,8 +45,8 @@ void shader_create_program(GLuint *shader_program, GLuint vertex_shader, GLuint 
 
 void shader_create_shader_program(GLuint *shader_id, const char* vert_path, const char* frag_path)
 {
-  GLuint vertex_shader;
-  GLuint fragment_shader;
+	GLuint vertex_shader;
+	GLuint fragment_shader;
 
 	shader_create(&vertex_shader, GL_VERTEX_SHADER, vert_path);
 	shader_create(&fragment_shader, GL_FRAGMENT_SHADER, frag_path);
