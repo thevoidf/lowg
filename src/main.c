@@ -15,6 +15,13 @@ void process_input(GLFWwindow *window);
 
 int main()
 {
+	// float* res = malloc(sizeof(float)*16);
+	// vec3 camera = { 0.0f, 0.0f, 0.0f };
+	// vec3 obj = { 0.0f, 0.0f, 0.0f };
+	// vec3 up = { 0.0f, 0.0f, 0.0f };
+	// mat4_look_at(res, camera, obj, up);
+	// mat4_print(res);
+
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -64,18 +71,18 @@ int main()
 
 	float pr[4*4];
 	float view[4*4];
-	float model[4*4];
 
+	mat4_identity(pr);
 	mat4_perspective(pr, 45.0f, (float) WIDTH/HEIGHT, 0.1f, 100.0f);
+	mat4_identity(view);
 	mat4_translate(view, 0.0f, 0.0f, -1.0f);
-	
-	float mat1[4*4];
-	float mat2[4*4];
 
-	vec3 axis = { 1.0f, 0.0f, 0.0f };
-	mat4_translate(mat1, 0.4f, 0.0f, 0.0f);
-	mat4_rotate(mat2, 60.0f, axis);
-	mat4_multiply(model, mat1, mat2);
+	float model[4*4];
+	float angle = 0.0f;
+	mat4_identity(model);
+	vec3 axis = { 0.0f, 1.0f, 0.0f };
+	mat4_rotate(model, angle, axis);
+	mat4_translate(model, 0.4f, 0.0f, 0.0f);
 
 	mat4_print(model);
 
@@ -88,6 +95,10 @@ int main()
 
 	while (!glfwWindowShouldClose(window)) {
 		process_input(window);
+
+		angle += 1.0f;
+		mat4_rotate(model, angle, axis);
+		glUniformMatrix4fv(model_location, 1, GL_FALSE, model);
 
 		glClearColor(0.2f, 0.1f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);

@@ -15,9 +15,10 @@ void mat4_perspective(float elements[],
 		float near,
 		float far);
 
-void mat4_translate(float elements[], float x, float y, float z);
-void mat4_rotate(float elements[], float angle, vec3 axis);
-void mat4_multiply(float res[], float mat1[], float mat2[]);
-void mat4_print(float mat[]);
+void mat4_translate(float *elements, float x, float y, float z);
+void mat4_rotate(float *elements, float angle, vec3 axis);
+void mat4_multiply(float *res, float *mat1, float *mat2);
+void mat4_look_at(float *mat, const vec3 camera, const vec3 obj, const vec3 up);
+void mat4_print(float *mat);
 
 #endif
