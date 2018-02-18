@@ -80,6 +80,18 @@ void mat4_rotate(float *elements, float angle, vec3 axis)
 	mat4_multiply(elements, mat, elements);
 }
 
+void mat4_scale(float *elements, vec3 scale)
+{
+	float mat[16];
+	mat4_identity(mat);
+
+	elements[0 + 0 * 4] = scale.x;
+	elements[1 + 1 * 4] = scale.y;
+	elements[2 + 2 * 4] = scale.z;
+
+	mat4_multiply(elements, mat, elements);
+}
+
 void mat4_multiply(float *res, float *mat1, float *mat2)
 {
 	int row, col, e;

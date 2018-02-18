@@ -2,57 +2,26 @@
 #include <glad/glad.h>
 #include "renderer.h"
 
-const unsigned int TYPE_TRIANGLE = 0;
-const unsigned int TYPE_RECTANGLE = 1;
-
-void begin_triangle
-(float* vertices, unsigned int size)
+void render(GLuint position_buffer, GLuint color_buffer,
+						GLuint* indices,
+						GLint size1, GLsizei stride1,
+						GLint size2, GLsizei stride2,
+						GLsizei draw_count,
+						GLenum mode)
 {
-  glGenVertexArrays(1, &vao);
-  glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, position_buffer);
 
-  glBindVertexArray(vao);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, size1, GL_FLOAT, GL_FALSE, stride1, 0);
 
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, color_buffer);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*) 0);
-  glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, size2, GL_FLOAT, GL_FALSE, stride2, 0);
 
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*) (3 * sizeof(float)));
-  glEnableVertexAttribArray(1);
-
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
-}
-
-void begin_rectangle
-(float* vertices, unsigned int vertices_size, unsigned int* indices, unsigned int indices_size, int vertex_shader, int fragment_shader)
-{
-  glGenBuffers(1, &vbo);
-  glGenBuffers(1, &ebo);
-  glGenVertexArrays(1, &vao);
-
-  glBindVertexArray(vao);
-
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, vertices_size, vertices, GL_STATIC_DRAW);
-
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_size, indices, GL_STATIC_DRAW);
-
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*) 0);
-  glEnableVertexAttribArray(0);
-
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
-}
-
-void render(const unsigned int shape)
-{
-  if (shape == TYPE_TRIANGLE) {
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-  } else if (shape == TYPE_RECTANGLE) {
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-  }
+	if (mode == GL_TRIANGLES) {
+		glDrawArrays(GL_TRIANGLES, 0, draw_count);
+	} else {
+		glDrawElements(GL_TRIANGLES, draw_count, GL_UNSIGNED_INT, indices);
+	}
 }
