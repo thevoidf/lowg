@@ -7,7 +7,6 @@
 namespace lowg {
 	Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath)
 	{
-
 		this->vertexShader = Shader::createShader(GL_VERTEX_SHADER, vertexShaderPath);
 		this->fragmentShader = Shader::createShader(GL_FRAGMENT_SHADER, fragmentShaderPath);
 
@@ -74,10 +73,22 @@ namespace lowg {
 		return shaderId;
 	}
 
+	void Shader::setUniform1f(const char* name, float value)
+	{
+		glUniform1f(getUniformLocation(name), value);
+	}
+
 	void Shader::setMatrix4fv(const char* name, glm::mat4 matrix)
 	{
+		glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
+	}
+
+	int Shader::getUniformLocation(const char* name)
+	{
 		int location = glGetUniformLocation(shaderId, name);
-		glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
+		if (location == -1)
+			std::cout << "Uniform " << name << " not found" << std::endl;
+		return location;
 	}
 
 	Shader::~Shader()

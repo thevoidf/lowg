@@ -28,5 +28,5 @@ $(OUT): $(OBJ)
 	$(CC) $< -c -o $@ $(LDFLAGS)
 
 clean:
-	rm $(OUT)
-	rm src/*.o
+	-rm $(OUT)
+	-rm src/*.o

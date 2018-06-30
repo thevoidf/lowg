@@ -20,19 +20,11 @@ int main(int argc, char* argv[])
 
 	Window window("lowg", WIDTH, HEIGHT);
 
-	Shader shader("assets/shaders/shader.vert", "assets/shaders/shader.frag");
-	shader.enable();
+	Shader color_shader("assets/shaders/color.vert", "assets/shaders/color.frag");
+	Shader texture_shader("assets/shaders/texture.vert", "assets/shaders/texture.frag");
 
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.f);
-	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -30.0f));
-	glm::mat4 model = glm::mat4(1.0f);
-
-	shader.setMatrix4fv("pr", projection);
-	shader.setMatrix4fv("view", view);
-	shader.setMatrix4fv("model", model);
-
-	Renderable sprite1(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(6.0f, 4.0f), glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), shader);
-	Renderable sprite2(glm::vec3(-5.0f, -2.0f, 1.0f), glm::vec2(2.0f, 2.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), shader);
+	Renderable sprite1(texture_shader, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(6.0f, 4.0f), "assets/snow.jpg");
+	Renderable sprite2(color_shader, glm::vec3(-5.0f, -2.0f, 1.0f), glm::vec2(2.0f, 2.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 
 	SimpleRenderer renderer;
 
