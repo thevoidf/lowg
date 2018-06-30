@@ -1,30 +1,32 @@
-CC = gcc
-OUT = main
-
-CFLAGS = -Wall
+CC = g++
+OUT = lowg
 
 SRC = $(wildcard src/*.c)
+SRC += $(wildcard src/*.cpp)
 SRC += $(wildcard lib/*.c)
-# SRC += $(wildcard lib/SOIL/*.c)
-OBJS = $(SRC:.c=.o)
+SRC += $(wildcard lib/*.cpp)
 
-CFLAGS = -Ilib
-CFLAGS += -Isrc
-CFLAGS += `pkg-config --cflags glfw3`
+OBJ = ${SRC:.cpp=.o}
 
-LDFLAGS = -Llib
+CFLAGS = -Wall
+CFLAGS += -Ilib
+CFLAGS += -Llib
+CFLAGS += `pkg-config --static --libs glfw3`
+CFLAGS += -lSOIL
+
+LDFLAGS = -Wall
 LDFLAGS += -lSOIL
+LDFLAGS += -Ilib
 LDFLAGS += `pkg-config --static --libs glfw3`
 
 all: $(OUT)
 
-$(OUT): $(OBJS)
-	$(CC) -o $@ $^ $(LDFLAGS)
+$(OUT): $(OBJ)
+	$(CC) -o $@ $^ $(CFLAGS)
 
-%.o: %.c
-	$(CC) $< -c -o $@ $(CFLAGS)
+%.o: %.cpp
+	$(CC) $< -c -o $@ $(LDFLAGS)
 
 clean:
-	rm $(OUT) $(OBJS)
-
-.PHONY: clean
+	rm $(OUT)
+	rm src/*.o

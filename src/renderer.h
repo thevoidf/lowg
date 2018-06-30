@@ -1,12 +1,10 @@
-#ifndef RENDERER_H
-#define RENDERER_H
-#include <glad/glad.h>
+#pragma once
 
-void render(GLuint position_buffer, GLuint color_buffer,
-						GLuint* indices,
-						GLint size1, GLsizei stride1,
-						GLint size2, GLsizei stride2,
-						GLsizei draw_count,
-						GLenum mode);
+#include "renderable.h"
 
-#endif
+class Renderer
+{
+	public:
+		virtual void submit(const Renderable* renderable) = 0;
+		virtual void flush() = 0;
+};
