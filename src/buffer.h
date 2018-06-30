@@ -1,16 +1,18 @@
 #pragma once
 
-class Buffer
-{
-private:
-  unsigned int buffer;
-  unsigned int componentCount;
-public:
-  Buffer(float* data, unsigned int count, unsigned int componentCount);
-  ~Buffer();
+namespace lowg {
+	class Buffer
+	{
+	private:
+		unsigned int buffer;
+		unsigned int componentCount;
+	public:
+		Buffer(float* data, unsigned int count, unsigned int componentCount);
+		~Buffer();
 
-  void bind() const;
-  void unbind() const;
+		void bind() const;
+		void unbind() const;
 
-  unsigned int getComponentCount() { return componentCount; }
-};
+		unsigned int getComponentCount() { return componentCount; }
+	};
+}

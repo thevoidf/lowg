@@ -1,19 +1,13 @@
 #include <iostream>
-#include <vector>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <SOIL/SOIL.h>
-#include "utils.h"
 #include "window.h"
 #include "shader.h"
-#include "buffer.h"
-#include "indexbuffer.h"
 #include "vertexarray.h"
-#include "renderable.h"
 #include "renderer.h"
 #include "simplerenderer.h"
 
@@ -22,6 +16,8 @@
 
 int main(int argc, char* argv[])
 {
+	using namespace lowg;
+
 	Window window("lowg", WIDTH, HEIGHT);
 
 	Shader shader("assets/shaders/shader.vert", "assets/shaders/shader.frag");

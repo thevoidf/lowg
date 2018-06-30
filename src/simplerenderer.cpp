@@ -4,28 +4,30 @@
 #include "renderable.h"
 #include "simplerenderer.h"
 
-void SimpleRenderer::submit(const Renderable* renderable)
-{
-	renderQueue.push_back(renderable);
-}
+namespace lowg {
+	void SimpleRenderer::submit(const Renderable* renderable)
+	{
+		renderQueue.push_back(renderable);
+	}
 
-void SimpleRenderer::flush()
-{
-	while (!renderQueue.empty()) {
-		const Renderable* renderable = renderQueue.front();
-		renderable->getVAO()->bind();
-		renderable->getIBO()->bind();
+	void SimpleRenderer::flush()
+	{
+		while (!renderQueue.empty()) {
+			const Renderable* renderable = renderQueue.front();
+			renderable->getVAO()->bind();
+			renderable->getIBO()->bind();
 
-		glm::vec2 size = renderable->getSize();
-		glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 0.0f)); 
-		model = glm::translate(model, renderable->getPosition());
+			glm::vec2 size = renderable->getSize();
+			glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 0.0f)); 
+			model = glm::translate(model, renderable->getPosition());
 
-		renderable->getShader().setMatrix4fv("model", model);
-		glDrawElements(GL_TRIANGLES, renderable->getIBO()->getCount(), GL_UNSIGNED_SHORT, 0);
+			renderable->getShader().setMatrix4fv("model", model);
+			glDrawElements(GL_TRIANGLES, renderable->getIBO()->getCount(), GL_UNSIGNED_SHORT, 0);
 
-		renderable->getVAO()->unbind();
-		renderable->getIBO()->unbind();
+			renderable->getVAO()->unbind();
+			renderable->getIBO()->unbind();
 
-		renderQueue.pop_front();
+			renderQueue.pop_front();
+		}
 	}
 }
