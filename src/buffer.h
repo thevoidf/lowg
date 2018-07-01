@@ -7,7 +7,7 @@ namespace lowg {
 		unsigned int buffer;
 		unsigned int componentCount;
 	public:
-		Buffer(float* data, unsigned int count, unsigned int componentCount);
+		Buffer(const void* data, unsigned int count, unsigned int componentCount);
 		~Buffer();
 
 		void bind() const;

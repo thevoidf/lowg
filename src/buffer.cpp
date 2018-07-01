@@ -2,7 +2,7 @@
 #include <glad/glad.h>
 
 namespace lowg {
-	Buffer::Buffer(float* data, unsigned int count, unsigned int componentCount)
+	Buffer::Buffer(const void* data, unsigned int count, unsigned int componentCount)
 	{
 		this->componentCount = componentCount;
 
