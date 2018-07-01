@@ -3,9 +3,8 @@
 
 namespace lowg {
 	Buffer::Buffer(const void* data, unsigned int count, unsigned int componentCount)
+		: componentCount(componentCount)
 	{
-		this->componentCount = componentCount;
-
 		glGenBuffers(1, &buffer);
 		glBindBuffer(GL_ARRAY_BUFFER, buffer);
 		glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), data, GL_STATIC_DRAW);
