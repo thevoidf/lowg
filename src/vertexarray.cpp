@@ -7,7 +7,7 @@ namespace lowg {
 		glGenVertexArrays(1, &array);
 	}
 
-	void VertexArray::addBuffer(Buffer* buffer, unsigned int index)
+	void VertexArray::addBuffer(VertexBuffer* buffer, unsigned int index)
 	{
 		bind();
 		buffer->bind();

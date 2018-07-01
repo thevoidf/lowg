@@ -1,14 +1,14 @@
 #pragma once
 
 namespace lowg {
-	class Buffer
+	class VertexBuffer
 	{
 	private:
 		unsigned int buffer;
 		unsigned int componentCount;
 	public:
-		Buffer(const void* data, unsigned int count, unsigned int componentCount);
-		~Buffer();
+		VertexBuffer(const void* data, unsigned int size, unsigned int componentCount);
+		~VertexBuffer();
 
 		void bind() const;
 		void unbind() const;

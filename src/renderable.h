@@ -38,7 +38,7 @@ namespace lowg {
 
 			texture = NULL;
 
-			vertexArray->addBuffer(new Buffer(vertices, 3 * 4, 3), 0);
+			vertexArray->addBuffer(new VertexBuffer(vertices, sizeof(vertices), 3), 0);
 		}
 
 		Renderable(Shader& shader, glm::vec3 position, glm::vec2 size, glm::vec4 color)
@@ -51,7 +51,7 @@ namespace lowg {
 				color.x, color.y, color.z, color.w
 			};
 
-			vertexArray->addBuffer(new Buffer(colors, 4 * 4, 4), 1);
+			vertexArray->addBuffer(new VertexBuffer(colors, sizeof(colors), 4), 1);
 		}
 
 		Renderable(Shader& shader, glm::vec3 position, glm::vec2 size, const char* texture_path)
@@ -65,7 +65,7 @@ namespace lowg {
 			};
 
 			texture = new Texture(texture_path);
-			vertexArray->addBuffer(new Buffer(texCoords, 2 * 4, 2), 1);
+			vertexArray->addBuffer(new VertexBuffer(texCoords, sizeof(texCoords), 2), 1);
 		}
 
 		virtual ~Renderable()
