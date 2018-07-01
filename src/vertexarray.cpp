@@ -30,7 +30,7 @@ namespace lowg {
 	}
 
 	VertexArray::~VertexArray() {
-		for (int i = 0; i < buffers.size(); i++) {
+		for (unsigned int i = 0; i < buffers.size(); i++) {
 			delete buffers[i];
 		}
 	}
