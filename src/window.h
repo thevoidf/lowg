@@ -12,9 +12,9 @@ namespace lowg {
 	class Window
 	{
 	private:
+		const char* title;
 		unsigned int width;
 		unsigned int height;
-		const char* title;
 		GLFWwindow *window;
 
 		bool keys[MAX_KEYS];

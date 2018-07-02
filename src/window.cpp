@@ -3,11 +3,8 @@
 
 namespace lowg {
 	Window::Window(const char* title, unsigned int width, unsigned int height)
+		: title(title), width(width), height(height)
 	{
-		this->title = title;
-		this->width = width;
-		this->height = height;
-
 		if (!init())
 			glfwTerminate();
 
