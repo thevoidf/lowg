@@ -5,10 +5,10 @@
 #include "renderable.h"
 
 namespace lowg {
-	class SimpleRenderer : public Renderer
+	class Simple3DRenderer : public Renderer
 	{
 		public:
-			std::deque<const Renderable2D*> renderQueue;
+			std::deque<const Renderable3D*> renderQueue;
 
 			void submit(const Renderable* renderable) override;
 			void flush() override;

@@ -3,20 +3,20 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "shader.h"
-#include "renderable.h"
+#include "renderable2d.h"
 #include "simplerenderer.h"
 #include "texture.h"
 
 namespace lowg {
 	void SimpleRenderer::submit(const Renderable* renderable)
 	{
-		renderQueue.push_back(renderable);
+		renderQueue.push_back((Renderable2D*) renderable);
 	}
 
 	void SimpleRenderer::flush()
 	{
 		while (!renderQueue.empty()) {
-			const Renderable* renderable = renderQueue.front();
+			const Renderable2D* renderable = renderQueue.front();
 
 			Shader& shader = renderable->getShader();
 			shader.enable();

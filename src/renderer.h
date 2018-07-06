@@ -1,6 +1,6 @@
 #pragma once
 
-#include "renderable.h"
+#include "renderable2d.h"
 
 namespace lowg {
 	class Renderer
