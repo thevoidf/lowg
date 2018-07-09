@@ -12,8 +12,8 @@ namespace lowg {
 		Shader(const char* vertexShaderPath, const char* fragmentShaderPath);
 		~Shader();
 
-		void enable();
-		void disable();
+		void enable() const;
+		void disable() const;
 
 		static int createShader(const int type, const char* sourcePath);
 		static int createShaderProgram(unsigned int vertexShader, unsigned int fragmentShader);

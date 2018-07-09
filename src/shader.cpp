@@ -13,12 +13,12 @@ namespace lowg {
 		this->shaderId = Shader::createShaderProgram(this->vertexShader, this->fragmentShader);
 	}
 
-	void Shader::enable()
+	void Shader::enable() const
 	{
 		glUseProgram(this->shaderId);
 	}
 
-	void Shader::disable()
+	void Shader::disable() const
 	{
 		glUseProgram(0);
 	}

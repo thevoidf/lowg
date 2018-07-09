@@ -4,8 +4,10 @@
 
 namespace lowg {
 	Renderable3D::Renderable3D(Shader& shader, glm::vec3 position, const char* modelPath, const char* texturePath)
-		: Renderable(shader, position)
+		: position(position), shader(shader)
 	{
+		vertexArray = new VertexArray();
+
 		load_obj(modelPath, vertices, uvs, normals);
 
 		texture = new Texture(texturePath);

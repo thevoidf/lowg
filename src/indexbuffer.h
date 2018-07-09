@@ -8,6 +8,7 @@ namespace lowg {
 		unsigned int count;
 	public:
 		IndexBuffer(unsigned short* data, unsigned int count);
+		IndexBuffer(unsigned int* data, unsigned int count);
 		~IndexBuffer();
 
 		void bind() const;
