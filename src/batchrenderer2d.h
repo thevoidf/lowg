@@ -1,6 +1,6 @@
 #pragma once
 
-#include "renderer.h"
+#include "renderer2d.h"
 #include "indexbuffer.h"
 #include <glad/glad.h>
 
@@ -15,7 +15,7 @@ namespace lowg {
 #define SHADER_VERTEX_INDEX 0
 #define SHADER_COLOR_INDEX	1
 
-	class BatchRenderer2D : public Renderer
+	class BatchRenderer2D : public Renderer2D
 	{
 	private:
 		unsigned int vao;

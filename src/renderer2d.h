@@ -3,7 +3,7 @@
 #include "renderable2d.h"
 
 namespace lowg {
-	class Renderer
+	class Renderer2D
 	{
 		public:
 			virtual void submit(const Renderable2D* renderable) = 0;
