@@ -21,6 +21,7 @@ namespace lowg {
 		int getUniformLocation(const char* name);
 
 		void setUniform1f(const char* name, float value);
+		void setUniform2f(const char* name, glm::vec2& vec);
 		void setMatrix4fv(const char* name, glm::mat4 matrix);
 		unsigned int getShaderId() const { return this->shaderId; }
 	};
