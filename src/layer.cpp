@@ -22,12 +22,10 @@ namespace lowg {
 
 		((BatchRenderer2D*) renderer)->begin();
 		for (const Renderable2D* renderable : renderables)
-			renderer->submit(renderable);
+				renderable->submit(((BatchRenderer2D*) renderer));
 		((BatchRenderer2D*) renderer)->end();
 
 		renderer->flush();
-
-		// shader->disable();
 	}
 
 	Layer::~Layer()

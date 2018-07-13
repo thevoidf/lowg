@@ -65,8 +65,6 @@ namespace lowg {
 
 	void Window::clear(float r, float g, float b, float a) const
 	{
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LESS);
 		glClearColor(r, g, b, a);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}

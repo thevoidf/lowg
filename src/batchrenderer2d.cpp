@@ -54,19 +54,19 @@ namespace lowg {
 		const glm::vec2& size = renderable->getSize();
 		const glm::vec4& color = renderable->getColor();
 
-		buffer->vertex = position;
+		buffer->vertex = *transformationBack * glm::vec4(position.x, position.y, position.z, 1.0f);
 		buffer->color = color;
 		buffer++;
 
-		buffer->vertex = glm::vec3(position.x, position.y + size.y, position.z);
+		buffer->vertex = *transformationBack * glm::vec4(position.x, position.y + size.y, position.z, 1.0f);
 		buffer->color = color;
 		buffer++;
 
-		buffer->vertex = glm::vec3(position.x + size.x, position.y + size.y, position.z);
+		buffer->vertex = *transformationBack * glm::vec4(position.x + size.x, position.y + size.y, position.z, 1.0f);
 		buffer->color = color;
 		buffer++;
 
-		buffer->vertex = glm::vec3(position.x + size.x, position.y, position.z);
+		buffer->vertex = *transformationBack * glm::vec4(position.x + size.x, position.y, position.z, 1.0f);
 		buffer->color = color;
 		buffer++;
 

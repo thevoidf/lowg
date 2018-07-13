@@ -1,8 +1,9 @@
 #pragma once
 
-#include "renderer2d.h"
-#include "indexbuffer.h"
 #include <glad/glad.h>
+#include "indexbuffer.h"
+#include "renderable2d.h"
+#include "renderer2d.h"
 
 namespace lowg {
 
