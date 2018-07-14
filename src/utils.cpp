@@ -1,12 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <glad/glad.h>
-#include <glm/vec3.hpp>
-#include <glm/vec2.hpp>
-#include <SOIL/SOIL.h>
-#include <iostream>
-#include <vector>
-
 #include "utils.h"
 
 namespace lowg {
@@ -32,17 +23,6 @@ namespace lowg {
 		fclose(file);
 
 		return buf;
-	}
-
-	unsigned int gen_buffer(void* data, unsigned int size)
-	{
-		unsigned int buffer;
-		glGenBuffers(1, &buffer);
-		glBindBuffer(GL_ARRAY_BUFFER, buffer);
-		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-		return buffer;
 	}
 
 	bool load_obj(const char* path, std::vector<glm::vec3>& out_verts,
@@ -137,34 +117,6 @@ namespace lowg {
 		}
 
 		return true;
-	}
-
-	void load_texture(const char* image_path, int &width,
-			int &height, unsigned int &tex)
-	{
-
-		glGenTextures(1, &tex);
-		glBindTexture(GL_TEXTURE_2D, tex);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		float color[] = { 1.0f, 0.0f, 1.0f };
-		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, color);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		float pixels[] = {
-			0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-			1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f
-		};
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, pixels);
-
-		unsigned char* image = SOIL_load_image(image_path, &width,
-					&height, 0, SOIL_LOAD_RGB);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
-									GL_UNSIGNED_BYTE, image);
 	}
 
 	BYTE* load_image(const char* path, unsigned int& width, unsigned int& height)
