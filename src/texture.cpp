@@ -1,11 +1,9 @@
 #include "texture.h"
 
-#include <iostream>
-
 namespace lowg {
 	Texture::Texture(const char* path)
 	{
-		imageBuffer = SOIL_load_image(path, &width, &height, 0, SOIL_LOAD_RGBA);
+		BYTE* pixels = load_image(path, width, height);
 		
 		glGenTextures(1, &textureId);
 		glBindTexture(GL_TEXTURE_2D, textureId);
@@ -15,7 +13,17 @@ namespace lowg {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuffer);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, pixels);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	void Texture::bind() const
+	{
+		glBindTexture(GL_TEXTURE_2D, textureId);
+	}
+
+	void Texture::unbind() const
+	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
@@ -24,14 +32,4 @@ namespace lowg {
 		glDeleteTextures(1, &textureId);
 	}
 
-	void Texture::bind() const
-	{
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, textureId);
-	}
-
-	void Texture::unbind() const
-	{
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
 }

@@ -1,8 +1,11 @@
 #version 330 core
 layout (location = 0) in vec3 pos;
-layout (location = 1) in vec2 tex_coord;
+layout (location = 1) in vec2 uv;
+layout (location = 2) in vec4 color;
 
-out vec2 out_tex_coord;
+out vec3 out_position;
+out vec2 out_uv;
+out vec4 out_color;
 
 uniform mat4 pr;
 uniform mat4 view;
@@ -11,5 +14,7 @@ uniform mat4 model;
 void main()
 {
 	gl_Position = pr * view * model * vec4(pos, 1.0);
-	out_tex_coord = tex_coord;
+	out_position = pos;
+	out_uv = uv;
+	out_color = color;
 }

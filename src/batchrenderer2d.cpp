@@ -15,10 +15,15 @@ namespace lowg {
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glBufferData(GL_ARRAY_BUFFER, RENDERER_BUFFER_SIZE, NULL, GL_DYNAMIC_DRAW);
+
 		glEnableVertexAttribArray(SHADER_VERTEX_INDEX);
+		glEnableVertexAttribArray(SHADER_TEXTURE_INDEX);
 		glEnableVertexAttribArray(SHADER_COLOR_INDEX);
+
 		glVertexAttribPointer(SHADER_VERTEX_INDEX, 3, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, (const GLvoid*)0);
-		glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, (const GLvoid*)(3 * sizeof(GLfloat)));
+		glVertexAttribPointer(SHADER_TEXTURE_INDEX, 2, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, (const GLvoid*)(offsetof(VertexData, VertexData::uv)));
+		glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, (const GLvoid*)(offsetof(VertexData, VertexData::color)));
+
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		unsigned int* indices = new unsigned int[RENDERER_INDICES_SIZE];
@@ -53,20 +58,25 @@ namespace lowg {
 		const glm::vec3& position = renderable->getPosition();
 		const glm::vec2& size = renderable->getSize();
 		const glm::vec4& color = renderable->getColor();
+		const std::vector<glm::vec2>& uv = renderable->getUV();
 
 		buffer->vertex = *transformationBack * glm::vec4(position.x, position.y, position.z, 1.0f);
+		buffer->uv = uv[0];
 		buffer->color = color;
 		buffer++;
 
 		buffer->vertex = *transformationBack * glm::vec4(position.x, position.y + size.y, position.z, 1.0f);
+		buffer->uv = uv[1];
 		buffer->color = color;
 		buffer++;
 
 		buffer->vertex = *transformationBack * glm::vec4(position.x + size.x, position.y + size.y, position.z, 1.0f);
+		buffer->uv = uv[2];
 		buffer->color = color;
 		buffer++;
 
 		buffer->vertex = *transformationBack * glm::vec4(position.x + size.x, position.y, position.z, 1.0f);
+		buffer->uv = uv[3];
 		buffer->color = color;
 		buffer++;
 

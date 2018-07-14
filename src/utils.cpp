@@ -7,6 +7,8 @@
 #include <iostream>
 #include <vector>
 
+#include "utils.h"
+
 namespace lowg {
 	char* file_read(const char *path)
 	{
@@ -163,5 +165,30 @@ namespace lowg {
 					&height, 0, SOIL_LOAD_RGB);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
 									GL_UNSIGNED_BYTE, image);
+	}
+
+	BYTE* load_image(const char* path, unsigned int& width, unsigned int& height)
+	{
+		FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
+		FIBITMAP *dib = nullptr;
+		fif = FreeImage_GetFileType(path, 0);
+
+		if(fif == FIF_UNKNOWN) 
+			fif = FreeImage_GetFIFFromFilename(path);
+
+		if(fif == FIF_UNKNOWN)
+			return nullptr;
+
+		if(FreeImage_FIFSupportsReading(fif))
+			dib = FreeImage_Load(fif, path);
+
+		if(!dib)
+			return nullptr;
+
+		BYTE* result = FreeImage_GetBits(dib);
+		width = FreeImage_GetWidth(dib);
+		height = FreeImage_GetHeight(dib);
+
+		return result;
 	}
 }

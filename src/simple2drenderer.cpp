@@ -15,8 +15,9 @@ namespace lowg {
 
 			sprite->getVAO()->bind();
 			sprite->getIBO()->bind();
+			sprite->getTexture()->bind();
 
-			sprite->getShader().setMatrix4fv("model", glm::translate(glm::mat4(1.0f), sprite->getPosition()));
+			// sprite->getShader().setMatrix4fv("model", glm::translate(glm::mat4(1.0f), sprite->getPosition()));
 			glDrawElements(GL_TRIANGLES, sprite->getIBO()->getCount(), GL_UNSIGNED_SHORT, 0);
 
 			sprite->getVAO()->unbind();

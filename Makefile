@@ -12,10 +12,12 @@ CFLAGS = -Wall
 CFLAGS += -Ilib
 CFLAGS += -Llib
 CFLAGS += `pkg-config --static --libs glfw3`
+CFLAGS += -lfreeimage
 CFLAGS += -lSOIL
 
 LDFLAGS = -Wall
 LDFLAGS += -lSOIL
+LDFLAGS += -lfreeimage
 LDFLAGS += -Ilib
 LDFLAGS += `pkg-config --static --libs glfw3`
 

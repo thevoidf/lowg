@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glad/glad.h>
-#include <SOIL/SOIL.h>
+#include "utils.h"
 
 namespace lowg {
 	class Texture
@@ -9,8 +9,7 @@ namespace lowg {
 	private:
 		unsigned int textureId;
 		const char* filePath;
-		unsigned char* imageBuffer;
-		int width, height;
+		unsigned int width, height;
 	public:
 		Texture(const char* path);
 		~Texture();
@@ -18,7 +17,7 @@ namespace lowg {
 		void bind() const;
 		void unbind() const;
 
-		inline int getWidth() const { return width; }
-		inline int getHeight() const { return height; }
+		inline unsigned int getWidth() const { return width; }
+		inline unsigned int getHeight() const { return height; }
 	};
 }
