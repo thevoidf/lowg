@@ -29,7 +29,7 @@ namespace lowg {
 
 	Texture::~Texture()
 	{
-		glDeleteTextures(1, &textureId);
+		// glDeleteTextures(1, &textureId);
 	}
 
 }

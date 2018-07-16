@@ -1,7 +1,8 @@
 #pragma once
 
-#include "renderable2d.h"
 #include <glad/glad.h>
+#include "renderable2d.h"
+#include "texture.h"
 
 namespace lowg {
 
@@ -9,5 +10,6 @@ namespace lowg {
 	{
 	public:
 		Sprite(float x, float y, float width, float height, const glm::vec4& color);
+		Sprite(float x, float y, float width, float height, Texture* texture);
 	};
 }

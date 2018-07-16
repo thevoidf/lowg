@@ -15,7 +15,6 @@
 #define HEIGHT 520
 
 #define BATCH_RENDERER
-#define RENDER_TILES
 
 int main(int argc, char* argv[])
 {
@@ -36,8 +35,20 @@ int main(int argc, char* argv[])
 	texture_shader->setMatrix4fv("model", model);
 
 	TileLayer layer(texture_shader);
-	Texture texture("assets/snow.jpg");
-	texture.bind();
+	Texture* textures[] = {
+		new Texture("assets/tex.jpg"),
+		new Texture("assets/snow.jpg")
+	};
+	int texIDs[] = {
+		0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+	};
+
+	layer.add(new Sprite(-10, 0, 4, 4, textures[0]));
+	layer.add(new Sprite(0, 0, 4, 4, textures[1]));
+	layer.add(new Sprite(10, 0, 4, 4, glm::vec4(1, 0, 1, 1)));
+
+	texture_shader->enable();
+	texture_shader->setUniform1iv("textures", texIDs, 10);
 
 #ifdef RENDER_TILES
 	for (float y = -9.0f; y < 9.0f; y += 2.0f) {

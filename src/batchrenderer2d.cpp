@@ -1,5 +1,7 @@
 #include "batchrenderer2d.h"
 
+#include <iostream>
+
 namespace lowg {
 	BatchRenderer2D::BatchRenderer2D()
 		: indexCount(0)
@@ -17,11 +19,13 @@ namespace lowg {
 		glBufferData(GL_ARRAY_BUFFER, RENDERER_BUFFER_SIZE, NULL, GL_DYNAMIC_DRAW);
 
 		glEnableVertexAttribArray(SHADER_VERTEX_INDEX);
+		glEnableVertexAttribArray(SHADER_UV_INDEX);
 		glEnableVertexAttribArray(SHADER_TEXTURE_INDEX);
 		glEnableVertexAttribArray(SHADER_COLOR_INDEX);
 
 		glVertexAttribPointer(SHADER_VERTEX_INDEX, 3, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, (const GLvoid*)0);
-		glVertexAttribPointer(SHADER_TEXTURE_INDEX, 2, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, (const GLvoid*)(offsetof(VertexData, VertexData::uv)));
+		glVertexAttribPointer(SHADER_UV_INDEX, 2, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, (const GLvoid*)(offsetof(VertexData, VertexData::uv)));
+		glVertexAttribPointer(SHADER_TEXTURE_INDEX, 1, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, (const GLvoid*)(offsetof(VertexData, VertexData::tid)));
 		glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, (const GLvoid*)(offsetof(VertexData, VertexData::color)));
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -59,24 +63,52 @@ namespace lowg {
 		const glm::vec2& size = renderable->getSize();
 		const glm::vec4& color = renderable->getColor();
 		const std::vector<glm::vec2>& uv = renderable->getUV();
+		const unsigned int tid = renderable->getTID();
+
+		float ts = 0.0f;
+		if (tid > 0) {
+			bool found = false;
+			for (unsigned int i = 0; i < textureSlots.size(); i++) {
+				if (textureSlots[i] == tid) {
+					ts = (float) (i + 1);
+					found = true;
+					break;
+				}
+			}
+
+			if (!found) {
+				// 32
+				if (textureSlots.size() >= 32) {
+					end();
+					flush();
+					begin();
+				}
+				textureSlots.push_back(tid);
+				ts = (float) (textureSlots.size());
+			}
+		}
 
 		buffer->vertex = *transformationBack * glm::vec4(position.x, position.y, position.z, 1.0f);
 		buffer->uv = uv[0];
+		buffer->tid = ts;
 		buffer->color = color;
 		buffer++;
 
 		buffer->vertex = *transformationBack * glm::vec4(position.x, position.y + size.y, position.z, 1.0f);
 		buffer->uv = uv[1];
+		buffer->tid = ts;
 		buffer->color = color;
 		buffer++;
 
 		buffer->vertex = *transformationBack * glm::vec4(position.x + size.x, position.y + size.y, position.z, 1.0f);
 		buffer->uv = uv[2];
+		buffer->tid = ts;
 		buffer->color = color;
 		buffer++;
 
 		buffer->vertex = *transformationBack * glm::vec4(position.x + size.x, position.y, position.z, 1.0f);
 		buffer->uv = uv[3];
+		buffer->tid = ts;
 		buffer->color = color;
 		buffer++;
 
@@ -91,6 +123,10 @@ namespace lowg {
 
 	void BatchRenderer2D::flush()
 	{
+		for (unsigned int i = 0; i < textureSlots.size(); i++) {
+			glActiveTexture(GL_TEXTURE0 + i);
+			glBindTexture(GL_TEXTURE_2D, textureSlots[i]);
+		}
 		glBindVertexArray(vao);
 		ibo->bind();
 

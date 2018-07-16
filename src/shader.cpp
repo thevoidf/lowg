@@ -83,6 +83,10 @@ namespace lowg {
 		glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
 	}
 
+	void Shader::setUniform1iv(const char* name, int* value, int count)
+	{
+		glUniform1iv(getUniformLocation(name), count, value);
+	}
 
 	void Shader::setUniform2f(const char* name, glm::vec2& vec)
 	{

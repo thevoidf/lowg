@@ -17,6 +17,7 @@ namespace lowg {
 		void bind() const;
 		void unbind() const;
 
+		inline const unsigned int getID() const { return textureId; }
 		inline unsigned int getWidth() const { return width; }
 		inline unsigned int getHeight() const { return height; }
 	};
