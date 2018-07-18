@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 #include <glm/mat4x4.hpp>
@@ -34,9 +35,10 @@ int main(int argc, char* argv[])
 
 	Layer layer(new BatchRenderer2D(),  texture_shader, glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
 
-	layer.add(new Sprite(-10, 0, 4, 4, new Texture("assets/tex.jpg")));
-	layer.add(new Sprite(0, 0, 4, 4, new Texture("assets/snow.jpg")));
-	layer.add(new Sprite(10, 0, 4, 4, glm::vec4(1, 0, 1, 1)));
+	Sprite* ship = new Sprite(0, -5, 4, 4, new Texture("/home/void/Pictures/ship.png"));
+	layer.add(ship);
+
+	std::vector<Sprite*> projectiles;
 
 #ifdef RENDER_TILES
 	for (float y = -9.0f; y < 9.0f; y += 2.0f) {
@@ -48,25 +50,33 @@ int main(int argc, char* argv[])
 
 	double start = glfwGetTime();
 	int frames = 0;
-	float x = 0.0f, y = 0.0f;
 	while (!window.shouldClose()) {
-		window.clear(0.2f, 0.1f, 0.5f, 1.0f);
+		window.clear(0.2f, 0.1f, 0.5f, 0.0f);
 
 		if (window.isKeyPressed(GLFW_KEY_W))
-			y += 0.1f;
+			ship->position.y += 0.2f;
 		if (window.isKeyPressed(GLFW_KEY_S))
-			y -= 0.1f;
+			ship->position.y -= 0.2f;
 		if (window.isKeyPressed(GLFW_KEY_A))
-			x -= 0.1f;
+			ship->position.x -= 0.2f;
 		if (window.isKeyPressed(GLFW_KEY_D))
-			x += 0.1f;
+			ship->position.x += 0.2f;
 
-		glm::vec2 pos = window.getMousePosition();
-		glm::vec2 p = glm::vec2((float) (pos.x * 32.0f / WIDTH - 16.0f), (float) (9.0f - pos.y * 18.0f / HEIGHT));
+		if (window.isKeyDown(GLFW_KEY_SPACE)) {
+			layer.add(new Sprite(ship->position.x + 1.0f, ship->position.y + 3.0f, 1.5f, 1.5f, new Texture("/home/void/Pictures/ship.png")));
+		}
 
-		texture_shader->enable();
-		texture_shader->setMatrix4fv("model", glm::translate(view, glm::vec3(x, y, 0.0f)));
-		texture_shader->setUniform2f("light_pos", p);
+		for (unsigned int i = 0; i < layer.getRenderables().size(); i++) {
+			if (i == 0) continue;
+			Sprite* projectile = (Sprite*) layer.getRenderables()[i];
+			projectile->position.y += 0.4f;
+
+			if (projectile->position.y > 8.0f) {
+				layer.remove(i);
+			}
+		}
+
+		// printf("projectiles: %d\n", layer.getRenderables().size() - 1);
 
 		layer.render();
 

@@ -6,13 +6,11 @@ in vec2 out_uv;
 in float out_tid;
 in vec4 out_color;
 
-uniform sampler2D textures[32];
+uniform sampler2D textures[18];
 uniform vec2 light_pos;
 
 void main()
 {
-	float intensity = 1.0 / length(out_position.xy - light_pos);
-
 	vec4 texColor = out_color;
 	if (out_tid > 0.0) {
 		int tid = int(out_tid - 0.5);
@@ -22,6 +20,32 @@ void main()
 			texColor = texture(textures[1], out_uv);
 		if (tid == 2)
 			texColor = texture(textures[2], out_uv);
+		if (tid == 3)
+			texColor = texture(textures[3], out_uv);
+		if (tid == 4)
+			texColor = texture(textures[4], out_uv);
+		if (tid == 5)
+			texColor = texture(textures[5], out_uv);
+		if (tid == 6)
+			texColor = texture(textures[6], out_uv);
+		if (tid == 7)
+			texColor = texture(textures[7], out_uv);
+		if (tid == 8)
+			texColor = texture(textures[8], out_uv);
+		if (tid == 9)
+			texColor = texture(textures[9], out_uv);
+		if (tid == 10)
+			texColor = texture(textures[10], out_uv);
+		if (tid == 11)
+			texColor = texture(textures[11], out_uv);
+		if (tid == 12)
+			texColor = texture(textures[12], out_uv);
+		if (tid == 13)
+			texColor = texture(textures[13], out_uv);
+		if (tid == 14)
+			texColor = texture(textures[14], out_uv);
+		if (tid == 15)
+			texColor = texture(textures[15], out_uv);
 	}
-	color = texColor * intensity;
+	color = texColor;
 }

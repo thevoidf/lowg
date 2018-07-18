@@ -10,15 +10,20 @@ namespace lowg {
 		shader->setMatrix4fv("pr", projectionMatrix);
 		int texIDs[] = {
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-			11, 12, 13, 14, 15, 16, 17, 18
+			11, 12, 13, 14
 		};
-		shader->setUniform1iv("textures", texIDs, 19);
+		shader->setUniform1iv("textures", texIDs, 15);
 		shader->disable();
 	}
 
 	void Layer::add(Renderable2D* renderable)
 	{
 		renderables.push_back(renderable);
+	}
+
+	void Layer::remove(unsigned int index)
+	{
+		renderables.erase(renderables.begin() + index);
 	}
 
 	void Layer::render()

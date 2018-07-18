@@ -77,8 +77,7 @@ namespace lowg {
 			}
 
 			if (!found) {
-				// 32
-				if (textureSlots.size() >= 32) {
+				if (textureSlots.size() >= 15) {
 					end();
 					flush();
 					begin();

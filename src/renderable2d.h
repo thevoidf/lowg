@@ -18,8 +18,9 @@ namespace lowg {
 
 	class Renderable2D
 	{
-	protected:
+	public:
 		glm::vec3 position;
+	protected:
 		glm::vec2 size;
 		glm::vec4 color;
 		std::vector<glm::vec2> uvs;
