@@ -136,6 +136,7 @@ namespace lowg {
 		glBindVertexArray(0);
 
 		indexCount = 0;
+		textureSlots.clear();
 	}
 
 	BatchRenderer2D::~BatchRenderer2D()
