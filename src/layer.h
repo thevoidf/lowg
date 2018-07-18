@@ -17,7 +17,6 @@ namespace lowg {
 		glm::mat4 projectionMatrix;
 	public:
 		Layer();
-	protected:
 		Layer(Renderer2D* renderer, Shader* shader, glm::mat4 projectionMatrix);
 	public:
 		virtual ~Layer();
