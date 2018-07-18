@@ -8,7 +8,7 @@
 #include "batchrenderer2d.h"
 #include "sprite.h"
 #include "group.h"
-#include "tilelayer.h"
+#include "layer.h"
 #include "texture.h"
 
 #define WIDTH 840
@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 	texture_shader->setMatrix4fv("view", view);
 	texture_shader->setMatrix4fv("model", model);
 
-	TileLayer layer(texture_shader);
+	Layer layer(new BatchRenderer2D(),  texture_shader, glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
 	Texture* textures[] = {
 		new Texture("assets/tex.jpg"),
 		new Texture("assets/snow.jpg")
