@@ -25,30 +25,18 @@ int main(int argc, char* argv[])
 	Shader* color_shader = new Shader("assets/shaders/color.vert", "assets/shaders/color.frag");
 	Shader* texture_shader = new Shader("assets/shaders/texture.vert", "assets/shaders/texture.frag");
 
-	glm::mat4 projection = glm::ortho(0.0f, 16.0f, 0.0f, 9.0f, -1.0f, 1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 model = glm::mat4(1.0f);
 
 	texture_shader->enable();
-	texture_shader->setMatrix4fv("pr", projection);
 	texture_shader->setMatrix4fv("view", view);
 	texture_shader->setMatrix4fv("model", model);
 
 	Layer layer(new BatchRenderer2D(),  texture_shader, glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
-	Texture* textures[] = {
-		new Texture("assets/tex.jpg"),
-		new Texture("assets/snow.jpg")
-	};
-	int texIDs[] = {
-		0, 1, 2, 3, 4, 5, 6, 7, 8, 9
-	};
 
-	layer.add(new Sprite(-10, 0, 4, 4, textures[0]));
-	layer.add(new Sprite(0, 0, 4, 4, textures[1]));
+	layer.add(new Sprite(-10, 0, 4, 4, new Texture("assets/tex.jpg")));
+	layer.add(new Sprite(0, 0, 4, 4, new Texture("assets/snow.jpg")));
 	layer.add(new Sprite(10, 0, 4, 4, glm::vec4(1, 0, 1, 1)));
-
-	texture_shader->enable();
-	texture_shader->setUniform1iv("textures", texIDs, 10);
 
 #ifdef RENDER_TILES
 	for (float y = -9.0f; y < 9.0f; y += 2.0f) {
