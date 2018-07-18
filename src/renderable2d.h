@@ -46,7 +46,7 @@ namespace lowg {
 		inline const glm::vec2& getSize() const { return size; }
 		inline const glm::vec4& getColor() const { return color; }
 		inline const std::vector<glm::vec2>& getUV() const { return uvs; }
-		inline const unsigned int getTID() const { return texture == nullptr ? 0 : texture->getID(); }
+		inline const unsigned int getTID() const { return texture ? texture->getID() : 0; }
 	private:
 		void init()
 		{
