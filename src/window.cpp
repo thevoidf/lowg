@@ -11,6 +11,8 @@ namespace lowg {
 		int i;
 		for (i = 0; i < MAX_KEYS; i++) {
 			keys[i] = false;
+			keyState[i] = false;
+			keyTyped[i] = false;
 		}
 		for (i = 0; i < MAX_BUTTONS; i++) {
 			mouseButtons[i] = false;
@@ -49,8 +51,13 @@ namespace lowg {
 		return true;
 	}
 
-	void Window::update() const
+	void Window::update()
 	{
+		for (int i = 0; i < MAX_KEYS; i++)
+			keyTyped[i] = keys[i] && !keyState[i];
+
+		memcpy(keyState, keys, MAX_KEYS);
+
 		GLenum error = glGetError();
 		if (error != GL_NO_ERROR)
 			std::cout << "OpenGL Error: " << error << std::endl;
@@ -98,6 +105,13 @@ namespace lowg {
 		if (keyCode > MAX_KEYS)
 			return false;
 		return keys[keyCode];
+	}
+
+	bool Window::isKeyDown(unsigned int keyCode) const
+	{
+		if (keyCode > MAX_KEYS)
+			return false;
+		return keyTyped[keyCode];
 	}
 
 	bool Window::isMouseButtonPressed(unsigned int buttonCode) const

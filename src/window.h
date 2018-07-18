@@ -18,16 +18,19 @@ namespace lowg {
 		GLFWwindow *window;
 
 		bool keys[MAX_KEYS];
+		bool keyState[MAX_KEYS];
+		bool keyTyped[MAX_KEYS];
 		bool mouseButtons[MAX_BUTTONS];
 		double mouseX, mouseY; 
 	public:
 		Window(const char* title, unsigned int width, unsigned int height);
 		~Window();
-		void update() const;
+		void update();
 		bool shouldClose() const;
 		void clear(float r, float g, float b, float a) const;
 
 		bool isKeyPressed(unsigned int keyCode) const;
+		bool isKeyDown(unsigned int keyCode) const;
 		bool isMouseButtonPressed(unsigned int buttonCode) const;
 		glm::vec2 getMousePosition() const;
 	private:
