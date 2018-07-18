@@ -27,8 +27,8 @@ namespace lowg {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwSwapInterval(0.0);
 
-		this->window = glfwCreateWindow(this->width, this->height, this->title, NULL, NULL);
-		if (this->window == NULL) {
+		window = glfwCreateWindow(width, height, title, NULL, NULL);
+		if (window == NULL) {
 			std::cout << "Failed to create window" << std::endl;
 			return false;
 		}
@@ -61,13 +61,13 @@ namespace lowg {
 		GLenum error = glGetError();
 		if (error != GL_NO_ERROR)
 			std::cout << "OpenGL Error: " << error << std::endl;
-		glfwSwapBuffers(this->window);
+		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
 	bool Window::shouldClose() const
 	{
-		return glfwWindowShouldClose(this->window);
+		return glfwWindowShouldClose(window);
 	}
 
 	void Window::clear(float r, float g, float b, float a) const
