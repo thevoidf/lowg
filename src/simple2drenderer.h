@@ -8,7 +8,7 @@
 #include "staticsprite.h"
 
 namespace lowg {
-	class SimpleRenderer : public Renderer2D
+	class Simple2DRenderer : public Renderer2D
 	{
 		public:
 			std::deque<const StaticSprite*> renderQueue;

@@ -3,12 +3,12 @@
 #include <iostream>
 
 namespace lowg {
-	void SimpleRenderer::submit(const Renderable2D* renderable)
+	void Simple2DRenderer::submit(const Renderable2D* renderable)
 	{
 		renderQueue.push_back((StaticSprite*) renderable);
 	}
 
-	void SimpleRenderer::flush()
+	void Simple2DRenderer::flush()
 	{
 		while (!renderQueue.empty()) {
 			const StaticSprite* sprite = renderQueue.front();
