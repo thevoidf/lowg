@@ -40,12 +40,6 @@ int main(int argc, char* argv[])
 	
 	srand(time(NULL));
 
-	for (int i = 0; i < 100; i++) {
-		int x = rand() % (16 * 2) - 16;
-		int y = rand() % (9 * 2) - 9;
-		particles.push_back(new StaticSprite(x, y, 0.1f, 0.1f, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), *color_shader));
-	}
-	
 	double start = glfwGetTime();
 	int frames = 0;
 	bool gameOver = false;
@@ -65,14 +59,19 @@ int main(int argc, char* argv[])
 			projectiles.push_back(new StaticSprite(ship->position.x + 1.0f, ship->position.y + 3.0f, 1.5f, 1.5f, "/home/void/Pictures/ship.png", *shader));
 		}
 
+		int x = rand() % (16 * 2) - 16;
+		int y = rand() % (9 * 2) - 9;
+		particles.push_back(new StaticSprite(x, y, 0.1f, 0.1f, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), *color_shader));
+
 		for (unsigned int i = 0; i < particles.size(); i++) {
 			Renderable2D* particle = particles[i];
 			float xa = 2.0f * ((float) rand() / (float) RAND_MAX) - 1.0f;
 			float ya = 2.0f * ((float) rand() / (float) RAND_MAX) - 1.0f;
+			float yas = rand() % 1000 / 1000.0f;
 
 			particle->position.x += xa / 10.0f;
-			particle->position.y += ya / 10.0f;
-
+			particle->position.y += yas / 10.0f;
+			
 			if (particle->position.y >= 9.0f) {
 				particles.erase(particles.begin() + i);
 			}
