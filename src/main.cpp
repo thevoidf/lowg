@@ -6,16 +6,21 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "window.h"
 #include "shader.h"
-#include "batchrenderer2d.h"
-#include "sprite.h"
-#include "group.h"
-#include "layer.h"
-#include "texture.h"
+#include "renderable2d.h"
+#include "staticsprite.h"
+#include "simple2drenderer.h"
+#include <time.h>
 
-#define WIDTH 840
-#define HEIGHT 520
+#define WIDTH 620
+#define HEIGHT 420
 
-#define BATCH_RENDERER
+bool aabb(lowg::Renderable2D a, lowg::Renderable2D b)
+{
+	return a.position.x < b.position.x + b.getSize().x &&
+			a.position.x + a.getSize().x > b.position.x &&
+			a.position.y < b.position.y + b.getSize().y &&
+			a.getSize().y + a.position.y > b.position.y;
+}
 
 int main(int argc, char* argv[])
 {
@@ -24,64 +29,106 @@ int main(int argc, char* argv[])
 	Window window("lowg", WIDTH, HEIGHT);
 
 	Shader* color_shader = new Shader("assets/shaders/color.vert", "assets/shaders/color.frag");
-	Shader* texture_shader = new Shader("assets/shaders/texture.vert", "assets/shaders/texture.frag");
+	Shader* shader = new Shader("assets/shaders/texture.vert", "assets/shaders/texture.frag");
 
-	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 model = glm::mat4(1.0f);
+	Renderable2D* ship = new StaticSprite(0.0f, -7.0f, 3.0f, 3.0f, "/home/void/Pictures/ship.png", *shader);
+	Simple2DRenderer renderer;
 
-	texture_shader->enable();
-	texture_shader->setMatrix4fv("view", view);
-	texture_shader->setMatrix4fv("model", model);
+	std::vector<Renderable2D*> enemies;
+	std::vector<Renderable2D*> projectiles;
+	std::vector<Renderable2D*> particles;
+	
+	srand(time(NULL));
 
-	Layer layer(new BatchRenderer2D(),  texture_shader, glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
-
-	Sprite* ship = new Sprite(0, -5, 4, 4, new Texture("/home/void/Pictures/ship.png"));
-	layer.add(ship);
-
-	std::vector<Sprite*> projectiles;
-
-#ifdef RENDER_TILES
-	for (float y = -9.0f; y < 9.0f; y += 2.0f) {
-		for (float x = -16.0f; x < 16.0f; x += 2.0f) {
-			layer.add(new Sprite(x, y, 1.9f, 1.9f, glm::vec4(rand() % 1000 / 1000.0f,  rand() % 1000 / 1000.0f, rand() % 1000 / 1000.0f, 1.0f)));
-		}
+	for (int i = 0; i < 100; i++) {
+		int x = rand() % (16 * 2) - 16;
+		int y = rand() % (9 * 2) - 9;
+		particles.push_back(new StaticSprite(x, y, 0.1f, 0.1f, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), *color_shader));
 	}
-#endif
-
+	
 	double start = glfwGetTime();
 	int frames = 0;
+	bool gameOver = false;
 	while (!window.shouldClose()) {
-		window.clear(0.2f, 0.1f, 0.5f, 0.0f);
+		window.clear(0.0f, 0.0f, 0.0f, 0.0f);
 
 		if (window.isKeyPressed(GLFW_KEY_W))
-			ship->position.y += 0.2f;
+			ship->position.y += 0.3f;
 		if (window.isKeyPressed(GLFW_KEY_S))
-			ship->position.y -= 0.2f;
+			ship->position.y -= 0.3f;
 		if (window.isKeyPressed(GLFW_KEY_A))
-			ship->position.x -= 0.2f;
+			ship->position.x -= 0.3f;
 		if (window.isKeyPressed(GLFW_KEY_D))
-			ship->position.x += 0.2f;
+			ship->position.x += 0.3f;
 
 		if (window.isKeyDown(GLFW_KEY_SPACE)) {
-			layer.add(new Sprite(ship->position.x + 1.0f, ship->position.y + 3.0f, 1.5f, 1.5f, new Texture("/home/void/Pictures/ship.png")));
+			projectiles.push_back(new StaticSprite(ship->position.x + 1.0f, ship->position.y + 3.0f, 1.5f, 1.5f, "/home/void/Pictures/ship.png", *shader));
 		}
 
-		for (unsigned int i = 0; i < layer.getRenderables().size(); i++) {
-			if (i == 0) continue;
-			Sprite* projectile = (Sprite*) layer.getRenderables()[i];
+		for (unsigned int i = 0; i < particles.size(); i++) {
+			Renderable2D* particle = particles[i];
+			float xa = 2.0f * ((float) rand() / (float) RAND_MAX) - 1.0f;
+			float ya = 2.0f * ((float) rand() / (float) RAND_MAX) - 1.0f;
+
+			particle->position.x += xa / 10.0f;
+			particle->position.y += ya / 10.0f;
+
+			if (particle->position.y >= 9.0f) {
+				particles.erase(particles.begin() + i);
+			}
+			renderer.submit(particle);
+		}
+
+		for (unsigned int i = 0; i < projectiles.size(); i++) {
+			Renderable2D* projectile = projectiles[i];
+
 			projectile->position.y += 0.4f;
 
+			renderer.submit(projectile);
+
 			if (projectile->position.y > 8.0f) {
-				layer.remove(i);
+				projectiles.erase(projectiles.begin() + i);
 			}
 		}
 
-		// printf("projectiles: %d\n", layer.getRenderables().size() - 1);
+		for (unsigned int i = 0; i < enemies.size(); i++) {
+			Renderable2D* enemy = enemies[i];
 
-		layer.render();
+			if (!gameOver)
+				enemy->position.y -= 0.1f;
+
+			if (enemy->position.y < -10.0f)
+				enemies.erase(enemies.begin() + i);
+
+			renderer.submit(enemy);
+		}
+
+		for (unsigned int i = 0; i < enemies.size(); i++) {
+			for (unsigned int j = 0; j < projectiles.size(); j++) {
+				if (aabb(*enemies[i], *projectiles[j])) {
+					enemies.erase(enemies.begin() + i);
+					projectiles.erase(projectiles.begin() + j);
+				}
+			}
+		}
+
+		for (unsigned int i = 0; i < enemies.size(); i++) {
+			if (aabb(*ship, *enemies[i])) {
+				gameOver = true;
+			}
+		}
+
+		renderer.submit(ship);
+		renderer.flush();
 
 		frames++;
+
 		if (glfwGetTime() - start >= 1.0) {
+			if (!gameOver) {
+				int enemyX = rand() % 16 + (4 - 16);
+				enemies.push_back(new StaticSprite(enemyX, 8.0f, 3.0f, 3.0f, "/home/void/Pictures/ship.png", *shader));
+			}
+
 			printf("%d frames\n", frames);
 			frames = 0;
 			start += 1.0;

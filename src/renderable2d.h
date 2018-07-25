@@ -20,22 +20,19 @@ namespace lowg {
 	{
 	public:
 		glm::vec3 position;
+		glm::vec3 rotation;
+		float angle;
+		glm::vec3 scale;
 	protected:
 		glm::vec2 size;
 		glm::vec4 color;
 		std::vector<glm::vec2> uvs;
 		Texture* texture;
 	protected:
-		Renderable2D()
-		{
-			init();
-		}
+		Renderable2D() { init(); }
 	public:
 		Renderable2D(glm::vec3 position, glm::vec2 size, glm::vec4 color)
-			: position(position), size(size), color(color)
-		{
-			init();
-		}
+			: position(position), size(size), color(color) { init(); }
 		virtual ~Renderable2D() { }
 
 		virtual void submit(Renderer2D* renderer) const
@@ -43,7 +40,6 @@ namespace lowg {
 			renderer->submit(this);
 		}
 
-		inline const glm::vec3& getPosition() const { return position; }
 		inline const glm::vec2& getSize() const { return size; }
 		inline const glm::vec4& getColor() const { return color; }
 		inline const std::vector<glm::vec2>& getUV() const { return uvs; }
@@ -56,6 +52,10 @@ namespace lowg {
 			uvs.push_back(glm::vec2(1.0f, 1.0f));
 			uvs.push_back(glm::vec2(1.0f, 0.0f));
 			texture = nullptr;
+
+			rotation = glm::vec3(0.0f, 0.0f, 1.0f);
+			scale = glm::vec3(1.0f, 1.0f, 1.0f);
+			angle = 0.0f;
 		}
 	};
 }

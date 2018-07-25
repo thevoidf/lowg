@@ -59,7 +59,7 @@ namespace lowg {
 
 	void BatchRenderer2D::submit(const Renderable2D* renderable)
 	{
-		const glm::vec3& position = renderable->getPosition();
+		const glm::vec3& position = renderable->position;
 		const glm::vec2& size = renderable->getSize();
 		const glm::vec4& color = renderable->getColor();
 		const std::vector<glm::vec2>& uv = renderable->getUV();
