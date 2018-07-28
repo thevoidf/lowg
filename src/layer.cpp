@@ -21,10 +21,19 @@ namespace lowg {
 		renderables.push_back(renderable);
 	}
 
-	void Layer::remove(unsigned int index)
+	void Layer::remove(void *ptr)
+	{
+		for (int i = 0; i < renderables.size(); i++) {
+			if (renderables[i] == ptr)
+				renderables.erase(renderables.begin() + i);
+		}
+	}
+
+	void Layer::removeByIndex(unsigned int index)
 	{
 		renderables.erase(renderables.begin() + index);
 	}
+
 
 	void Layer::render()
 	{

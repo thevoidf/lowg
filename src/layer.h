@@ -21,7 +21,8 @@ namespace lowg {
 	public:
 		virtual ~Layer();
 		virtual void add(Renderable2D* renderable);
-		virtual void remove(unsigned int index);
+		virtual void remove(void *ptr);
+		virtual void removeByIndex(unsigned int index);
 		virtual void render();
 		std::vector<Renderable2D*> getRenderables() { return renderables; }
 	};
