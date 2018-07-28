@@ -23,7 +23,7 @@ namespace lowg {
 
 	void Layer::remove(void *ptr)
 	{
-		for (int i = 0; i < renderables.size(); i++) {
+		for (unsigned int i = 0; i < renderables.size(); i++) {
 			if (renderables[i] == ptr)
 				renderables.erase(renderables.begin() + i);
 		}
@@ -34,14 +34,13 @@ namespace lowg {
 		renderables.erase(renderables.begin() + index);
 	}
 
-
 	void Layer::render()
 	{
 		shader->enable();
 
 		((BatchRenderer2D*) renderer)->begin();
 		for (const Renderable2D* renderable : renderables)
-				renderable->submit(((BatchRenderer2D*) renderer));
+			renderable->submit(((BatchRenderer2D*) renderer));
 		((BatchRenderer2D*) renderer)->end();
 
 		renderer->flush();
