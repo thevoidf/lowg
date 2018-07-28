@@ -11,8 +11,8 @@ out float out_tid;
 out vec4 out_color;
 
 uniform mat4 pr;
-uniform mat4 view;
-uniform mat4 model;
+uniform mat4 view = mat4(1.0);
+uniform mat4 model = mat4(1.0);
 
 void main()
 {
