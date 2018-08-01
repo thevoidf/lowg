@@ -2,9 +2,9 @@ CC = g++
 OUT = lowg
 
 SRC = $(shell find src -name '*.cpp')
-SRC += $(shell find src -name '*.c')
-SRC += $(shell find deps/glad -name '*.c')
-OBJ = $(patsubst %.cpp, %.o, $(SRC))
+SRCC = $(shell find deps/glad -name '*.c')
+OBJ = $(patsubst src/%.cpp, objs/%.o, $(SRC))
+OBJC = $(patsubst deps/glad/%.c, objs/%.o, $(SRCC))
 
 CFLAGS = -Wall
 CFLAGS += -Ideps
@@ -12,14 +12,19 @@ CFLAGS += -Ldeps
 CFLAGS += `pkg-config --static --libs glfw3`
 CFLAGS += -lfreeimage
 
-all: $(OUT)
+all: $(OBJ) $(OBJC)
 
-$(OUT): $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
-
-%.o: %.cpp
+$(OBJ): objs/%.o: src/%.cpp
 	$(CC) $< -c -o $@ $(CFLAGS)
 
+$(OBJC): objs/%.o: deps/glad/%.c
+	$(CC) $< -c -o $@ $(CFLAGS)
+
+OBJS = $(OBJ)
+OBJS += $(OBJC)
+
+lib:
+	@$(foreach obj,$(OBJS),ar -cvq liblowg.a $(obj);)
+
 clean:
-	-rm $(OUT)
-	-find src -type f -name '*.o' -delete
+	-find . -type f -name '*.o' -delete
