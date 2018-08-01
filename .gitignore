@@ -6,5 +6,5 @@
 *~
 \#*\#
 
-# main executable
-lowg
+objs/*
+!objs/.gitkeep
