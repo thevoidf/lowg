@@ -1,23 +1,16 @@
 CC = g++
 OUT = lowg
 
-SRC = $(wildcard src/*.c)
-SRC += $(wildcard src/*.cpp)
-SRC += $(wildcard lib/*.c)
-SRC += $(wildcard lib/*.cpp)
-
-OBJ = ${SRC:.cpp=.o}
+SRC = $(shell find src -name '*.cpp')
+SRC += $(shell find src -name '*.c')
+SRC += $(shell find deps/glad -name '*.c')
+OBJ = $(patsubst %.cpp, %.o, $(SRC))
 
 CFLAGS = -Wall
-CFLAGS += -Ilib
-CFLAGS += -Llib
+CFLAGS += -Ideps
+CFLAGS += -Ldeps
 CFLAGS += `pkg-config --static --libs glfw3`
 CFLAGS += -lfreeimage
-
-LDFLAGS = -Wall
-LDFLAGS += -lfreeimage
-LDFLAGS += -Ilib
-LDFLAGS += `pkg-config --static --libs glfw3`
 
 all: $(OUT)
 
@@ -25,8 +18,8 @@ $(OUT): $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 %.o: %.cpp
-	$(CC) $< -c -o $@ $(LDFLAGS)
+	$(CC) $< -c -o $@ $(CFLAGS)
 
 clean:
 	-rm $(OUT)
-	-rm src/*.o
+	-find src -type f -name '*.o' -delete
