@@ -4,15 +4,15 @@
 #include <glm/vec4.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "window.h"
-#include "shader.h"
-#include "renderable2d.h"
-#include "staticsprite.h"
-#include "sprite.h"
-#include "simple2drenderer.h"
-#include "batchrenderer2d.h"
-#include "texture.h"
-#include "layer.h"
+#include "../src/window.h"
+#include "../src/shader.h"
+#include "../src/renderable2d.h"
+#include "../src/staticsprite.h"
+#include "../src/sprite.h"
+#include "../src/simple2drenderer.h"
+#include "../src/batchrenderer2d.h"
+#include "../src/texture.h"
+#include "../src/layer.h"
 #include <time.h>
 
 #define WIDTH 620
@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 
 	Window window("lowg", WIDTH, HEIGHT);
 
-	Shader* shader = new Shader("assets/shaders/texture.vert", "assets/shaders/texture.frag");
+	Shader* shader = new Shader("../assets/shaders/texture.vert", "../assets/shaders/texture.frag");
 
 	Renderable2D* ship = new Sprite(0.0f, -7.0f, 3.0f, 3.0f, new Texture("/home/void/Pictures/ship.png"));
 

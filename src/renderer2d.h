@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 #include <glm/mat4x4.hpp>
 
 namespace lowg {
@@ -36,6 +37,7 @@ namespace lowg {
 			}
 
 			virtual void submit(const Renderable2D* renderable) = 0;
+			virtual void drawString(const std::string& text, glm::vec3 position, const glm::vec4& color) {}
 			virtual void flush() = 0;
 	};
 }

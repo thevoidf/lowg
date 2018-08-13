@@ -13,6 +13,7 @@ namespace lowg {
 		void bind() const;
 		void unbind() const;
 
+		const unsigned int getId() const { return buffer; }
 		unsigned int getComponentCount() { return componentCount; }
 	};
 }

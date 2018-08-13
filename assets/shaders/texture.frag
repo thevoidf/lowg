@@ -6,19 +6,21 @@ in vec2 out_uv;
 in float out_tid;
 in vec4 out_color;
 
-uniform sampler2D textures[18];
+// uniform sampler2D textures[18];
+uniform sampler2D tex;
 
 void main()
 {
+/*
 	vec4 texColor = out_color;
 	if (out_tid > 0.0) {
 		int tid = int(out_tid - 0.5);
 		if (tid == 0)
-			texColor = texture(textures[0], out_uv);
+			texColor = out_color * texture(textures[0], out_uv);
 		if (tid == 1)
-			texColor = texture(textures[1], out_uv);
+			texColor = out_color * texture(textures[1], out_uv);
 		if (tid == 2)
-			texColor = texture(textures[2], out_uv);
+			texColor = out_color * texture(textures[2], out_uv);
 		if (tid == 3)
 			texColor = texture(textures[3], out_uv);
 		if (tid == 4)
@@ -47,4 +49,6 @@ void main()
 			texColor = texture(textures[15], out_uv);
 	};
 	color = texColor;
+	*/
+	color = texture(tex, out_uv);
 }

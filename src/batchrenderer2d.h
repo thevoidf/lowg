@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <glad/glad.h>
+#include "freetype-gl/freetype-gl.h"
 #include "indexbuffer.h"
 #include "renderable2d.h"
 #include "renderer2d.h"
@@ -28,11 +29,14 @@ namespace lowg {
 		unsigned int indexCount;
 		VertexData* buffer;
 		std::vector<unsigned int> textureSlots;
+		ftgl::texture_atlas_t* ftAtlas;
+		ftgl::texture_font_t* ftFont;
 	public:
 		BatchRenderer2D();
 		~BatchRenderer2D();
 		void begin();
 		void submit(const Renderable2D* renderable) override;
+		void drawString(const std::string& text, glm::vec3 position, const glm::vec4& color) override;
 		void end();
 		void flush() override;
 	private:

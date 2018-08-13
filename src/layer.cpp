@@ -12,7 +12,9 @@ namespace lowg {
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
 			11, 12, 13, 14
 		};
-		shader->setUniform1iv("textures", texIDs, 15);
+		//shader->setUniform1iv("textures", texIDs, 15);
+		glUniform1i(glGetUniformLocation(shader->getShaderId(), "tex"), 0);
+		// shader->setUniform1f("tex", 1);
 		shader->disable();
 	}
 
@@ -41,6 +43,10 @@ namespace lowg {
 		((BatchRenderer2D*) renderer)->begin();
 		for (const Renderable2D* renderable : renderables)
 			renderable->submit(((BatchRenderer2D*) renderer));
+
+		const glm::vec3 p(2.0f, 2.0f, 1.0f);
+		const glm::vec4 c(1.0f, 1.0f, 1.0f, 1.0f);
+		renderer->drawString("Hello", p, c);
 		((BatchRenderer2D*) renderer)->end();
 
 		renderer->flush();
