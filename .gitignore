@@ -6,8 +6,13 @@
 *~
 \#*\#
 
+# objs
 objs/*
 !objs/.gitkeep
 
+# test bins
 tests/main
 tests/fonts
+
+# lib
+liblowg.a
