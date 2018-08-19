@@ -1,4 +1,5 @@
 #version 330 core
+
 layout (location = 0) out vec4 color;
 
 in vec3 out_position;
@@ -45,6 +46,11 @@ void main()
 			texColor = texture(textures[14], out_uv);
 		if (tid == 15)
 			texColor = texture(textures[15], out_uv);
-	};
-	color = texColor;
+	}
+	
+	if (out_color.r == 1.0 && out_color.g == 1.0 && out_color.b == 1.0) {
+		color = texColor;
+	} else {
+		color = vec4(out_color.rgb, out_color.a * texColor.r);
+	}
 }
