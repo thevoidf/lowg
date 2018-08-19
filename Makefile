@@ -24,7 +24,10 @@ OBJS = $(OBJ)
 OBJS += $(OBJC)
 
 lib:
+	@echo "making lib"
 	@$(foreach obj,$(OBJS),ar -cvq liblowg.a $(obj);)
+
+.PHONY: lib
 
 clean:
 	-find . -type f -name '*.o' -delete
