@@ -1,6 +1,13 @@
-uniform sampler2D texture;
+#version 330 core
+
+out vec4 color;
+
+in vec2 out_uv;
+
+uniform sampler2D tex;
+
 void main()
 {
-    float a = texture2D(texture, gl_TexCoord[0].xy).r;
-    gl_FragColor = vec4(gl_Color.rgb, gl_Color.a*a);
+	// color = vec4(1.0, 1.0, 0.0, 1.0);
+	color = texture(tex, out_uv);
 }

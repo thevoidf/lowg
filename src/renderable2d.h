@@ -10,6 +10,8 @@
 
 namespace lowg {
 
+	enum Type { SPRITE, TEXT };
+
 	struct VertexData {
 		glm::vec3 vertex;
 		glm::vec2 uv;
@@ -24,6 +26,7 @@ namespace lowg {
 		glm::vec3 rotation;
 		float angle;
 		glm::vec3 scale;
+		Type type;
 	protected:
 		glm::vec2 size;
 		glm::vec4 color;

@@ -1,13 +1,16 @@
+#version 330 core
+
+layout (location = 0) in vec3 position;
+layout (location = 1) in vec2 uv;
+
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
-attribute vec3 vertex;
-attribute vec2 tex_coord;
-attribute vec4 color;
+out vec2 out_uv;
+
 void main()
 {
-    gl_TexCoord[0].xy = tex_coord.xy;
-    gl_FrontColor     = color;
-    gl_Position       = projection*(view*(model*vec4(vertex,1.0)));
+	gl_Position = vec4(position, 1.0);
+	out_uv = uv;
 }

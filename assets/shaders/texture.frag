@@ -1,4 +1,5 @@
 #version 330 core
+
 layout (location = 0) out vec4 color;
 
 in vec3 out_position;
@@ -6,21 +7,19 @@ in vec2 out_uv;
 in float out_tid;
 in vec4 out_color;
 
-// uniform sampler2D textures[18];
-uniform sampler2D tex;
+uniform sampler2D textures[18];
 
 void main()
 {
-/*
 	vec4 texColor = out_color;
 	if (out_tid > 0.0) {
 		int tid = int(out_tid - 0.5);
 		if (tid == 0)
-			texColor = out_color * texture(textures[0], out_uv);
+			texColor = texture(textures[0], out_uv);
 		if (tid == 1)
-			texColor = out_color * texture(textures[1], out_uv);
+			texColor = texture(textures[1], out_uv);
 		if (tid == 2)
-			texColor = out_color * texture(textures[2], out_uv);
+			texColor = texture(textures[2], out_uv);
 		if (tid == 3)
 			texColor = texture(textures[3], out_uv);
 		if (tid == 4)
@@ -47,8 +46,11 @@ void main()
 			texColor = texture(textures[14], out_uv);
 		if (tid == 15)
 			texColor = texture(textures[15], out_uv);
-	};
-	color = texColor;
-	*/
-	color = texture(tex, out_uv);
+	}
+	
+	if (out_color.r == 1.0 && out_color.g == 1.0 && out_color.b == 1.0) {
+		color = texColor;
+	} else {
+		color = vec4(out_color.rgb, out_color.a * texColor.r);
+	}
 }

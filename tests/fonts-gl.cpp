@@ -20,11 +20,11 @@ struct vertex_t {
 	float r, g, b, a; // color
 };
 
-GLuint vao, vbo, ibo;
+GLuint vao, positionBuffer, uvBuffer, ibo;
 
 std::vector<vertex_t> vertexVector;
 std::vector<GLuint> indexVector;
-texture_atlas_t *atlas;
+ftgl::texture_atlas_t *atlas;
 
 void add_text(texture_font_t *font, char *text, glm::vec4 *color, glm::vec2 *pen)
 {
@@ -79,21 +79,28 @@ int main()
 	Window window("lowg", WIDTH, HEIGHT);
 
 	size_t i;
-	texture_font_t *font = 0;
-	atlas = texture_atlas_new( 512, 512, 1 );
+	texture_font_t *font;
+	atlas = ftgl::texture_atlas_new( 512, 512, 1 );
 	const char * filename = "../assets/fonts/Vera.ttf";
-	char * text = "A Quick Brown Fox Jumps Over The Lazy Dog 0123456789";
+	char * text = "hello";
 	glm::vec2 pen(5,400);
 	glm::vec4 black(0,0,0,1);
-	for( i=7; i < 27; ++i)
-    {
-			font = texture_font_new_from_file( atlas, i, filename );
-			pen.x = 5;
-			pen.y -= font->height;
-			texture_font_load_glyphs( font, text );
-			add_text(font, text, &black, &pen );
-			texture_font_delete( font );
-    }
+	
+	font = ftgl::texture_font_new_from_file( atlas, 27, filename );
+	pen.x = 5;
+	pen.y -= font->height;
+	texture_font_load_glyphs( font, text);
+	add_text(font, text, &black, &pen );
+	texture_font_delete( font );
+
+
+	for (int i = 0; i < atlas->width * atlas->height; i++) {
+		if (atlas->data[i] != 0) {
+			printf("something: %d\n", atlas->data[i]);
+		}
+	}			
+
+
 
 	//for (int i = 0; i < 100; i++)
 	//printf("i: %d\n", indexVector[i]);
@@ -111,62 +118,60 @@ int main()
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(WIDTH), 0.0f, static_cast<GLfloat>(HEIGHT));
 
 	glGenVertexArrays(1, &vao);
-	glGenBuffers(1, &vbo);
+	glGenBuffers(1, &positionBuffer);
+	glGenBuffers(1, &uvBuffer);
 	glGenBuffers(1, &ibo);
+
+	float vertices[] = {
+		0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+		1.0f, 0.0f, 0.0f
+	};
+
+	unsigned int indices[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+
+ 	float uvs[] = {
+		0.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 1.0f,
+		1.0f, 0.0f
+	};
 	
 	while (!window.shouldClose()) {
 		window.clear(0.2f, 0.3f, 0.3f, 1.0f);
 
-		glClearColor( 1, 1, 1, 1 );
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-    glEnable( GL_BLEND );
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-
+		glBindTexture( GL_TEXTURE_2D, atlas->id );
+		
 		shader.enable();
 		glUniform1i(glGetUniformLocation(shader.getShaderId(), "texture"), 0);
+		/*
 		shader.setMatrix4fv("projection", projection);
 		shader.setMatrix4fv("view", glm::mat4(1.0f));
 		shader.setMatrix4fv("model", glm::mat4(1.0f));
+		*/
 
 		glBindVertexArray(vao);
 
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, vertexVector.size() * sizeof(vertex_t), &vertexVector[0], GL_DYNAMIC_DRAW);
-		//glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12, vertices, GL_DYNAMIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, uvs, GL_DYNAMIC_DRAW);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, 0, 0, 0);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexVector.size() * sizeof(GLuint), &indexVector[0], GL_DYNAMIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * 6, indices, GL_DYNAMIC_DRAW);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-		/*
-		// attribute vec3 vertex;
-		// attribute vec2 tex_coord;
-		// attribute vec4 color;
-
-		int vertexLocation = glGetAttribLocation(shader.getShaderId(), "vertex");
-		int uvLocation = glGetAttribLocation(shader.getShaderId(), "tex_coord");
-		int colorLocation = glGetAttribLocation(shader.getShaderId(), "color");
-
-		printf("vertex: %d, uv: %d, color: %d\n", vertexLocation, uvLocation, colorLocation);
-		*/
-
-    glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, 0, 36, (const GLvoid*) 0);
-		
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, 0, 36, (const GLvoid*) 12);
-		
-    glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 4, GL_FLOAT, 0, 36, (const GLvoid*) 20);
-
-		// printf("count: %d\n", indexVector.size());
-
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-		glDrawElements(GL_TRIANGLES, indexVector.size(), GL_UNSIGNED_INT, 0);
-		// glDrawArrays(GL_TRIANGLES, 0, 100000);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		
 		window.update();
 	}

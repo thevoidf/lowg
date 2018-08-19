@@ -18,6 +18,18 @@ namespace lowg {
 		buffer->unbind();
 		unbind();
 	}
+	
+	void VertexArray::attribPointer(VertexBuffer *buffer, unsigned int index, unsigned int size, unsigned int type, unsigned int stride, unsigned int offset)
+	{
+		bind();
+		buffer->bind();
+
+		glEnableVertexAttribArray(index);
+		glVertexAttribPointer(index, size, type, GL_FALSE, stride, (const GLvoid*) offset);
+
+		buffer->unbind();
+		unbind();
+	}
 
 	void VertexArray::bind() const
 	{

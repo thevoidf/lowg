@@ -73,6 +73,11 @@ namespace lowg {
 		return shaderId;
 	}
 
+	void Shader::setUniform1i(const char* name, int value)
+	{
+		glUniform1i(getUniformLocation(name), value);
+	}
+
 	void Shader::setUniform1f(const char* name, float value)
 	{
 		glUniform1f(getUniformLocation(name), value);

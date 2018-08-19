@@ -20,6 +20,7 @@ namespace lowg {
 
 		int getUniformLocation(const char* name);
 
+		void setUniform1i(const char* name, int value);
 		void setUniform1f(const char* name, float value);
 		void setUniform2f(const char* name, glm::vec2& vec);
 		void setUniform1iv(const char* name, int* value, int count);

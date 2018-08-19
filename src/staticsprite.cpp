@@ -19,7 +19,7 @@ namespace lowg {
 			color.x, color.y, color.z, color.w
 		};
 
-		unsigned short indices[] = {
+		unsigned int indices[] = {
 			0, 1, 2,
 			2, 3, 0
 		};
@@ -32,6 +32,7 @@ namespace lowg {
 	StaticSprite::StaticSprite(float x, float y, float width, float height, const char* texturePath, Shader& shader)
 		: Renderable2D(glm::vec3(x, y, 0.0f), glm::vec2(width, height), glm::vec4(0, 0, 0, 0)), shader(shader)
 	{
+		type = SPRITE;
 		vertexArray = new VertexArray();
 		float vertices[] = {
 			0.0f, 0.0f, 0.0f,
@@ -39,7 +40,7 @@ namespace lowg {
 			width, height, 0.0f,
 			width, 0.0f, 0.0f
 		};
-		unsigned short indices[] = {
+		unsigned int indices[] = {
 			0, 1, 2,
 			2, 3, 0
 		};

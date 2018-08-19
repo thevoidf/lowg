@@ -1,13 +1,9 @@
 #include "batchrenderer2d.h"
-#include "texture.h"
-#include "utils.h"
 
 #include <iostream>
 
 namespace lowg {
-	Texture* tex;
-	GLuint texId;
-
+	unsigned int tex;
 	BatchRenderer2D::BatchRenderer2D()
 		: indexCount(0)
 	{
@@ -36,10 +32,8 @@ namespace lowg {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		unsigned int* indices = new unsigned int[RENDERER_INDICES_SIZE];
-
 		int offset = 0;
-		for (int i = 0; i < RENDERER_INDICES_SIZE; i += 6)
-		{
+		for (int i = 0; i < RENDERER_INDICES_SIZE; i += 6) {
 			indices[  i  ] = offset + 0;
 			indices[i + 1] = offset + 1;
 			indices[i + 2] = offset + 2;
@@ -50,36 +44,13 @@ namespace lowg {
 
 			offset += 4;
 		}
-
+		
 		ibo = new IndexBuffer(indices, RENDERER_INDICES_SIZE);
 
 		glBindVertexArray(0);
 
 		ftAtlas = ftgl::texture_atlas_new(512, 512, 1);
-		ftFont = ftgl::texture_font_new_from_file(ftAtlas, 26, "../assets/fonts/Vera.ttf");
-
-				glGenerateMipmap(GL_TEXTURE_2D);
-
-		glGenTextures( 1, &ftAtlas->id );
-		glBindTexture( GL_TEXTURE_2D, ftAtlas->id );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-		glTexImage2D( GL_TEXTURE_2D, 0, GL_RED, ftAtlas->width, ftAtlas->height,
-									0, GL_RED, GL_UNSIGNED_BYTE, ftAtlas->data );
-
-		std::cout << "w: " << ftAtlas->width << ", h: " << ftAtlas->height << std::endl;
-
-		/*
-		unsigned int w, h;
-		BYTE* pixels = load_image("../assets/tex.jpg", w, h);
-		glGenTextures(1, &texId);
-		glBindTexture(GL_TEXTURE_2D, texId);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR, GL_UNSIGNED_BYTE, pixels);
-		*/
+		ftFont = ftgl::texture_font_new_from_file(ftAtlas, 32, "../assets/fonts/Vera.ttf");
 	}
 
 	void BatchRenderer2D::begin()
@@ -118,8 +89,6 @@ namespace lowg {
 			}
 		}
 
-		ts = 0;
-
 		buffer->vertex = *transformationBack * glm::vec4(position.x, position.y, position.z, 1.0f);
 		buffer->uv = uv[0];
 		buffer->tid = ts;
@@ -151,6 +120,16 @@ namespace lowg {
 	{
 		using namespace ftgl;
 
+		texture_font_load_glyphs(ftFont, text.c_str());
+		glGenTextures( 1, &ftAtlas->id );
+		glBindTexture( GL_TEXTURE_2D, ftAtlas->id );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+		glTexImage2D( GL_TEXTURE_2D, 0, GL_RED, ftAtlas->width, ftAtlas->height,
+									0, GL_RED, GL_UNSIGNED_BYTE, ftAtlas->data );
+
 		float ts = 0.0f;
 		bool found = false;
 		for (unsigned int i = 0; i < textureSlots.size(); i++) {
@@ -171,10 +150,8 @@ namespace lowg {
 			ts = (float)(textureSlots.size());
 		}
 
-		ts = 0;
-
-		float scaleX = 960.0f / 32.0f;
-		float scaleY = 540.0f / 18.0f;
+		float scaleX = 800.0f / 32.0f;
+		float scaleY = 500.0f / 18.0f;
 
 		float x = position.x;
 
@@ -227,7 +204,7 @@ namespace lowg {
 			}
 		}
 	}
-	
+
 	void BatchRenderer2D::end()
 	{
 		glUnmapBuffer(GL_ARRAY_BUFFER);
@@ -236,18 +213,10 @@ namespace lowg {
 
 	void BatchRenderer2D::flush()
 	{
-		/*
 		for (unsigned int i = 0; i < textureSlots.size(); i++) {
 			glActiveTexture(GL_TEXTURE0 + i);
 			glBindTexture(GL_TEXTURE_2D, textureSlots[i]);
 		}
-		*/
-		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture( GL_TEXTURE_2D, ftAtlas->id );
-		glBindTexture(GL_TEXTURE_2D, ftAtlas->id);
-		// std::cout << "ftid " << texId << std::endl;
-		//glBindTexture(GL_TEXTURE_2D, ftAtlas->id);
-		//tex->bind();
 		
 		glBindVertexArray(vao);
 		ibo->bind();

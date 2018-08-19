@@ -6,12 +6,13 @@
 #include "shader.h"
 #include "renderable2d.h"
 #include "staticsprite.h"
+#include "static_text.h"
 
 namespace lowg {
 	class Simple2DRenderer : public Renderer2D
 	{
 		public:
-			std::deque<const StaticSprite*> renderQueue;
+			std::deque<const Renderable2D*> renderQueue;
 
 			void submit(const Renderable2D* renderable) override;
 			void flush() override;
