@@ -31,3 +31,4 @@ lib:
 
 clean:
 	-find . -type f -name '*.o' -delete
+	-rm -rf liblowg.a
