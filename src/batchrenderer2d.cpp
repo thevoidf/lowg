@@ -120,15 +120,18 @@ namespace lowg {
 	{
 		using namespace ftgl;
 
-		texture_font_load_glyphs(ftFont, text.c_str());
-		glGenTextures( 1, &ftAtlas->id );
-		glBindTexture( GL_TEXTURE_2D, ftAtlas->id );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-		glTexImage2D( GL_TEXTURE_2D, 0, GL_RED, ftAtlas->width, ftAtlas->height,
-									0, GL_RED, GL_UNSIGNED_BYTE, ftAtlas->data );
+		const char* ctext = text.c_str();
+		
+		texture_font_load_glyphs(ftFont, ctext);
+		glGenTextures(1, &ftAtlas->id );
+		glBindTexture(GL_TEXTURE_2D, ftAtlas->id);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, ftAtlas->width, ftAtlas->height,
+								 0, GL_RED, GL_UNSIGNED_BYTE, ftAtlas->data);
+		glBindTexture(GL_TEXTURE_2D, 0);
 
 		float ts = 0.0f;
 		bool found = false;
@@ -155,12 +158,11 @@ namespace lowg {
 
 		float x = position.x;
 
-		const char* c = text.c_str();
 		for (unsigned int i = 0; i < text.length(); i++) {
-			texture_glyph_t* glyph = texture_font_get_glyph(ftFont, c + i);
+			texture_glyph_t* glyph = texture_font_get_glyph(ftFont, ctext + i);
 			if (glyph != NULL) {
 				if (i > 0) {
-					float kerning = texture_glyph_get_kerning(glyph, c + i - 1);
+					float kerning = texture_glyph_get_kerning(glyph, ctext + i - 1);
 					x += kerning / scaleX;
 				}
 
