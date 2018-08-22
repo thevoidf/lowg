@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 
 	Shader* shader = new Shader("../assets/shaders/texture.vert", "../assets/shaders/texture.frag");
 
-	Renderable2D* ship = new Sprite(0.0f, -7.0f, 3.0f, 3.0f, new Texture("/home/void/Pictures/ship.png"));
+	Renderable2D* ship = new Sprite(0.0f, -7.0f, 3.0f, 3.0f, new Texture("../assets/ship.png", GL_RGBA, GL_BGRA));
 
 	Layer layer(new BatchRenderer2D(), shader, glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
 	layer.add(ship);
@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 		if (window.isKeyPressed(GLFW_KEY_D))
 			ship->position.x += 0.3f;
 		if (window.isKeyDown(GLFW_KEY_SPACE)) {
-			Renderable2D* projectile = new Sprite(ship->position.x + 1.0f, ship->position.y + 3.0f, 1.5f, 1.5f, new Texture("/home/void/Pictures/ship.png"));
+			Renderable2D* projectile = new Sprite(ship->position.x + 1.0f, ship->position.y + 3.0f, 1.5f, 1.5f, new Texture("../assets/ship.png", GL_RGBA, GL_BGRA));
 			projectiles.push_back(projectile);
 			layer.add(projectile);
 		}
@@ -135,7 +135,7 @@ int main(int argc, char* argv[])
 		if (glfwGetTime() - start >= 1.0) {
 			if (!gameOver) {
 				int enemyX = rand() % 16 + (4 - 16);
-				Renderable2D* enemy = new Sprite(enemyX, 8.0f, 3.0f, 3.0f, new Texture("/home/void/Pictures/ship.png"));
+				Renderable2D* enemy = new Sprite(enemyX, 8.0f, 3.0f, 3.0f, new Texture("../assets/ship.png", GL_RGBA, GL_BGRA));
 				enemies.push_back(enemy);
 				layer.add(enemy);
 			}
