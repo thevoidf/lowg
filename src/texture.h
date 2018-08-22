@@ -8,10 +8,15 @@ namespace lowg {
 	{
 	private:
 		unsigned int textureId;
-		const char* filePath;
+		const char* path;
 		unsigned int width, height;
 	public:
+		int internalFormat;
+		int format;
+	public:
 		Texture(const char* path);
+		Texture(const char* path, int format);
+		Texture(const char* path, int internalFormat, int format);
 		~Texture();
 
 		void bind() const;
