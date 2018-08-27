@@ -2,12 +2,12 @@
 
 namespace lowg {
 	Texture::Texture(const char* path)
-		:	Texture(path, GL_RGB, GL_BGR)
+		: Texture(path, GL_RGB, GL_BGR)
 	{
 	}
 
 	Texture::Texture(const char* path, int format)
-		:	Texture(path, format, format)
+		: Texture(path, format, format)
 	{
 	}
 

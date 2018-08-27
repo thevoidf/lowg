@@ -4,7 +4,7 @@
 
 namespace lowg {
 	class Text : public Renderable2D {
-	private:
+	public:
 		std::string text;
 	public:
 		Text(std::string text, float x, float y, glm::vec4 color);

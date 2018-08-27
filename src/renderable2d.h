@@ -21,11 +21,11 @@ namespace lowg {
 	public:
 		glm::vec3 position;
 		glm::vec3 rotation;
-		float angle;
 		glm::vec3 scale;
-	protected:
 		glm::vec2 size;
 		glm::vec4 color;
+		float angle;
+	protected:
 		std::vector<glm::vec2> uvs;
 		Texture* texture;
 	protected:
