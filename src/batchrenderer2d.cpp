@@ -1,9 +1,6 @@
 #include "batchrenderer2d.h"
 
-#include <iostream>
-
 namespace lowg {
-	unsigned int tex;
 	BatchRenderer2D::BatchRenderer2D()
 		: indexCount(0)
 	{
@@ -48,9 +45,6 @@ namespace lowg {
 		ibo = new IndexBuffer(indices, RENDERER_INDICES_SIZE);
 
 		glBindVertexArray(0);
-
-		ftAtlas = ftgl::texture_atlas_new(512, 512, 1);
-		ftFont = ftgl::texture_font_new_from_file(ftAtlas, 32, "../assets/fonts/Vera.ttf");
 	}
 
 	void BatchRenderer2D::begin()
@@ -116,27 +110,23 @@ namespace lowg {
 		indexCount += 6;
 	}
 
-	void BatchRenderer2D::drawString(const std::string& text, const glm::vec3 position, const glm::vec4& color)
+	void BatchRenderer2D::drawString(const std::string& text, const glm::vec3 position, const glm::vec4& color, const Font& font)
 	{
-		using namespace ftgl;
-
-		const char* ctext = text.c_str();
-		
-		texture_font_load_glyphs(ftFont, ctext);
-		glGenTextures(1, &ftAtlas->id );
-		glBindTexture(GL_TEXTURE_2D, ftAtlas->id);
+		ftgl::texture_font_load_glyphs(font.font, text.c_str());
+		glGenTextures(1, &font.atlas->id );
+		glBindTexture(GL_TEXTURE_2D, font.atlas->id);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, ftAtlas->width, ftAtlas->height,
-								 0, GL_RED, GL_UNSIGNED_BYTE, ftAtlas->data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, font.atlas->width, font.atlas->height,
+								 0, GL_RED, GL_UNSIGNED_BYTE, font.atlas->data);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		float ts = 0.0f;
 		bool found = false;
 		for (unsigned int i = 0; i < textureSlots.size(); i++) {
-			if (textureSlots[i] == ftAtlas->id) {
+			if (textureSlots[i] == font.atlas->id) {
 				ts = (float)(i + 1);
 				found = true;
 				break;
@@ -149,7 +139,7 @@ namespace lowg {
 				flush();
 				begin();
 			}
-			textureSlots.push_back(ftAtlas->id);
+			textureSlots.push_back(font.atlas->id);
 			ts = (float)(textureSlots.size());
 		}
 
@@ -159,10 +149,10 @@ namespace lowg {
 		float x = position.x;
 
 		for (unsigned int i = 0; i < text.length(); i++) {
-			texture_glyph_t* glyph = texture_font_get_glyph(ftFont, ctext + i);
+			texture_glyph_t* glyph = ftgl::texture_font_get_glyph(font.font, text.c_str() + i);
 			if (glyph != NULL) {
 				if (i > 0) {
-					float kerning = texture_glyph_get_kerning(glyph, ctext + i - 1);
+					float kerning = ftgl::texture_glyph_get_kerning(glyph, text.c_str() + i - 1);
 					x += kerning / scaleX;
 				}
 

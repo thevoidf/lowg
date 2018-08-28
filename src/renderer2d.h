@@ -3,6 +3,7 @@
 #include <vector>
 #include <glm/mat4x4.hpp>
 #include <string>
+#include "font.h"
 
 namespace lowg {
 
@@ -37,7 +38,7 @@ namespace lowg {
 			}
 
 			virtual void submit(const Renderable2D* renderable) = 0;
-			virtual void drawString(const std::string& text, glm::vec3 position, const glm::vec4& color) {}
+			virtual void drawString(const std::string& text, const glm::vec3 position, const glm::vec4& color, const Font& font) {}
 			virtual void flush() = 0;
 	};
 }
