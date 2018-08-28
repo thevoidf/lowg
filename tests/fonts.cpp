@@ -25,9 +25,11 @@ int main()
 	Shader shader("../assets/shaders/texture.vert", "../assets/shaders/texture.frag");
 
 	Layer layer(new BatchRenderer2D(), &shader, glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f));
+
+	Font* font = new Font("../assets/fonts/Vera.ttf", 40);
 	Renderable2D* sprite = new Sprite(-12.0f, -2.0f, 15.0f, 8.0f, new Texture("../assets/tex.jpg"));
-	Renderable2D* text = new Text("hello lowg 12345", -5.0f, -5.0f, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
-	Renderable2D* text2 = new Text("hello lowg 12345", 0.0f, -7.0f, glm::vec4(0.0f, 1.0f, 1.0f, 1.0f));
+	Renderable2D* text = new Text("hello lowg 12345", -5.0f, -5.0f, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), font);
+	Renderable2D* text2 = new Text("hello lowg 12345", 0.0f, -7.0f, glm::vec4(0.0f, 1.0f, 1.0f, 1.0f), font);
 
 	layer.add(sprite);
 	layer.add(text);

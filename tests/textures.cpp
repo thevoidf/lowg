@@ -5,6 +5,7 @@
 #include "../src/layer.h"
 #include "../src/sprite.h"
 #include "../src/texture.h"
+#include "../src/text.h"
 
 #define WIDTH 800
 #define HEIGHT 500
