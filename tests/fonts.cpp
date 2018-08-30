@@ -6,13 +6,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "../src/window.h"
 #include "../src/shader.h"
-#include "../src/renderable2d.h"
-#include "../src/batchrenderer2d.h"
+#include "../src/renderer2d.h"
 #include "../src/layer.h"
 #include "../src/sprite.h"
 #include "../src/text.h"
 #include "../src/texture.h"
-#include <time.h>
 
 #define WIDTH 800
 #define HEIGHT 500
@@ -24,16 +22,15 @@ int main()
 	Window window("lowg", WIDTH, HEIGHT);
 	Shader shader("../assets/shaders/texture.vert", "../assets/shaders/texture.frag");
 
-	Layer layer(new BatchRenderer2D(), &shader, glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f));
+	Layer layer(new Renderer2D(), &shader, glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f));
+	Font font("../assets/fonts/Vera.ttf", 40);
+	Sprite sprite(-12.0f, -2.0f, 15.0f, 8.0f, new Texture("../assets/tex.jpg"));
+	Text text("hello lowg 12345", -5.0f, -5.0f, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), &font);
+	Text text2("hello lowg 12345", 0.0f, -7.0f, glm::vec4(0.0f, 1.0f, 1.0f, 1.0f), &font);
 
-	Font* font = new Font("../assets/fonts/Vera.ttf", 40);
-	Renderable2D* sprite = new Sprite(-12.0f, -2.0f, 15.0f, 8.0f, new Texture("../assets/tex.jpg"));
-	Renderable2D* text = new Text("hello lowg 12345", -5.0f, -5.0f, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), font);
-	Renderable2D* text2 = new Text("hello lowg 12345", 0.0f, -7.0f, glm::vec4(0.0f, 1.0f, 1.0f, 1.0f), font);
-
-	layer.add(sprite);
-	layer.add(text);
-	layer.add(text2);
+	layer.add(&sprite);
+	layer.add(&text);
+	layer.add(&text2);
 	
 	while (!window.shouldClose()) {
 		window.clear(1.0f, 0.0f, 1.0f, 1.0f);
