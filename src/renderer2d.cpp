@@ -1,14 +1,19 @@
-#include "batchrenderer2d.h"
+#include "renderer2d.h"
+#include "sprite.h"
+#include "font.h"
 
 namespace lowg {
-	BatchRenderer2D::BatchRenderer2D()
+	Renderer2D::Renderer2D()
 		: indexCount(0)
 	{
 		init();
 	}
 
-	void BatchRenderer2D::init()
+	void Renderer2D::init()
 	{
+		transformationStack.push_back(glm::mat4(1.0f));
+		transformationBack = &transformationStack.back();
+
 		glGenVertexArrays(1, &vao);
 		glGenBuffers(1, &vbo);
 
@@ -47,19 +52,35 @@ namespace lowg {
 		glBindVertexArray(0);
 	}
 
-	void BatchRenderer2D::begin()
+	void Renderer2D::push(const glm::mat4& matrix, bool override)
+	{
+		if (override)
+			transformationStack.push_back(matrix);
+		else
+			transformationStack.push_back(transformationStack.back() * matrix);
+		transformationBack = &transformationStack.back();
+	}
+
+	void Renderer2D::pop()
+	{
+		if (transformationStack.size() > 1)
+			transformationStack.pop_back();
+		transformationBack = &transformationStack.back();
+	}
+
+	void Renderer2D::begin()
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		buffer = (VertexData*) glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 	}
 
-	void BatchRenderer2D::submit(const Renderable2D* renderable)
+	void Renderer2D::submit(const Sprite* sprite)
 	{
-		const glm::vec3& position = renderable->position;
-		const glm::vec2& size = renderable->getSize();
-		const glm::vec4& color = renderable->getColor();
-		const std::vector<glm::vec2>& uv = renderable->getUV();
-		const unsigned int tid = renderable->getTID();
+		const glm::vec3& position = sprite->position;
+		const glm::vec2& size = sprite->getSize();
+		const glm::vec4& color = sprite->getColor();
+		const std::vector<glm::vec2>& uv = sprite->getUV();
+		const unsigned int tid = sprite->getTID();
 
 		float ts = 0.0f;
 		if (tid > 0) {
@@ -110,7 +131,7 @@ namespace lowg {
 		indexCount += 6;
 	}
 
-	void BatchRenderer2D::drawString(const std::string& text, const glm::vec3 position, const glm::vec4& color, const Font& font)
+	void Renderer2D::drawString(const std::string& text, const glm::vec3 position, const glm::vec4& color, const Font& font)
 	{
 		ftgl::texture_font_load_glyphs(font.font, text.c_str());
 		glGenTextures(1, &font.atlas->id );
@@ -197,13 +218,13 @@ namespace lowg {
 		}
 	}
 
-	void BatchRenderer2D::end()
+	void Renderer2D::end()
 	{
 		glUnmapBuffer(GL_ARRAY_BUFFER);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
-	void BatchRenderer2D::flush()
+	void Renderer2D::flush()
 	{
 		for (unsigned int i = 0; i < textureSlots.size(); i++) {
 			glActiveTexture(GL_TEXTURE0 + i);
@@ -222,7 +243,7 @@ namespace lowg {
 		textureSlots.clear();
 	}
 
-	BatchRenderer2D::~BatchRenderer2D()
+	Renderer2D::~Renderer2D()
 	{
 		delete ibo;
 		glDeleteBuffers(1, &vbo);

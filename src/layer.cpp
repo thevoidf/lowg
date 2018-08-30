@@ -1,6 +1,8 @@
 #include "layer.h"
 
-#include "batchrenderer2d.h"
+#include "renderer2d.h"
+#include "shader.h"
+#include "sprite.h"
 
 namespace lowg {
 	Layer::Layer(Renderer2D* renderer, Shader* shader, glm::mat4 projectionMatrix)
@@ -16,32 +18,32 @@ namespace lowg {
 		shader->disable();
 	}
 
-	void Layer::add(Renderable2D* renderable)
+	void Layer::add(Sprite* sprite)
 	{
-		renderables.push_back(renderable);
+		sprites.push_back(sprite);
 	}
 
 	void Layer::remove(void *ptr)
 	{
-		for (unsigned int i = 0; i < renderables.size(); i++) {
-			if (renderables[i] == ptr)
-				renderables.erase(renderables.begin() + i);
+		for (unsigned int i = 0; i < sprites.size(); i++) {
+			if (sprites[i] == ptr)
+				sprites.erase(sprites.begin() + i);
 		}
 	}
 
 	void Layer::removeByIndex(unsigned int index)
 	{
-		renderables.erase(renderables.begin() + index);
+		sprites.erase(sprites.begin() + index);
 	}
 
 	void Layer::render()
 	{
 		shader->enable();
 
-		((BatchRenderer2D*) renderer)->begin();
-		for (const Renderable2D* renderable : renderables)
-			renderable->submit(((BatchRenderer2D*) renderer));
-		((BatchRenderer2D*) renderer)->end();
+		renderer->begin();
+		for (const Sprite* sprite : sprites)
+			sprite->submit(renderer);
+		renderer->end();
 
 		renderer->flush();
 	}
@@ -50,8 +52,8 @@ namespace lowg {
 	{
 		delete renderer;
 		delete shader;
-		for (unsigned int i = 0; renderables.size(); i++) {
-			delete renderables[i];
+		for (unsigned int i = 0; sprites.size(); i++) {
+			delete sprites[i];
 		}
 	}
 }

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "renderable2d.h"
+#include "sprite.h"
 #include "font.h"
 
 namespace lowg {
-	class Text : public Renderable2D {
+	class Text : public Sprite {
 	public:
 		std::string text;
 		Font* font;

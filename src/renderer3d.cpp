@@ -4,16 +4,16 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "shader.h"
 #include "renderable3d.h"
-#include "simple3drenderer.h"
+#include "renderer3d.h"
 #include "texture.h"
 
 namespace lowg {
-	void Simple3DRenderer::submit(const Renderable3D* renderable)
+	void Renderer3D::submit(const Renderable3D* renderable)
 	{
 		renderQueue.push_back(renderable);
 	}
 
-	void Simple3DRenderer::flush()
+	void Renderer3D::flush()
 	{
 		while (!renderQueue.empty()) {
 			const Renderable3D* renderable = renderQueue.front();
