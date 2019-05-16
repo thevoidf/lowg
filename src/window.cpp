@@ -56,16 +56,19 @@ namespace lowg {
 
 	void Window::update()
 	{
-		for (int i = 0; i < MAX_KEYS; i++)
-			keyTyped[i] = keys[i] && !keyState[i];
-
-		memcpy(keyState, keys, MAX_KEYS);
 
 		GLenum error = glGetError();
 		if (error != GL_NO_ERROR)
 			std::cout << "OpenGL Error: " << error << std::endl;
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+	}
+
+	void Window::syncKeys()
+	{
+		for (int i = 0; i < MAX_KEYS; i++)
+			keyTyped[i] = keys[i] && !keyState[i];
+		memcpy(keyState, keys, MAX_KEYS);
 	}
 
 	bool Window::shouldClose() const

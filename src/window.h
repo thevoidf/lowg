@@ -26,6 +26,7 @@ namespace lowg {
 		Window(const char* title, unsigned int width, unsigned int height);
 		~Window();
 		void update();
+		void syncKeys();
 		bool shouldClose() const;
 		void clear(float r, float g, float b, float a) const;
 
