@@ -131,23 +131,12 @@ namespace lowg {
 		indexCount += 6;
 	}
 
-	void Renderer2D::drawString(const std::string& text, const glm::vec3 position, const glm::vec4& color, const Font& font)
+	void Renderer2D::drawString(const std::string& text, const glm::vec3 position, const glm::vec4& color, Font* font)
 	{
-		ftgl::texture_font_load_glyphs(font.font, text.c_str());
-		glGenTextures(1, &font.atlas->id );
-		glBindTexture(GL_TEXTURE_2D, font.atlas->id);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, font.atlas->width, font.atlas->height,
-								 0, GL_RED, GL_UNSIGNED_BYTE, font.atlas->data);
-		glBindTexture(GL_TEXTURE_2D, 0);
-
 		float ts = 0.0f;
 		bool found = false;
 		for (unsigned int i = 0; i < textureSlots.size(); i++) {
-			if (textureSlots[i] == font.atlas->id) {
+			if (textureSlots[i] == font->atlas->id) {
 				ts = (float)(i + 1);
 				found = true;
 				break;
@@ -160,7 +149,7 @@ namespace lowg {
 				flush();
 				begin();
 			}
-			textureSlots.push_back(font.atlas->id);
+			textureSlots.push_back(font->atlas->id);
 			ts = (float)(textureSlots.size());
 		}
 
@@ -170,7 +159,7 @@ namespace lowg {
 		float x = position.x;
 
 		for (unsigned int i = 0; i < text.length(); i++) {
-			texture_glyph_t* glyph = ftgl::texture_font_get_glyph(font.font, text.c_str() + i);
+			texture_glyph_t* glyph = ftgl::texture_font_get_glyph(font->font, text.c_str() + i);
 			if (glyph != NULL) {
 				if (i > 0) {
 					float kerning = ftgl::texture_glyph_get_kerning(glyph, text.c_str() + i - 1);

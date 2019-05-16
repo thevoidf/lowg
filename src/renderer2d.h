@@ -44,7 +44,7 @@ namespace lowg {
 
 		void begin();
 		void submit(const Sprite* sprite);
-		void drawString(const std::string& text, const glm::vec3 position, const glm::vec4& color, const Font& font);
+		void drawString(const std::string& text, const glm::vec3 position, const glm::vec4& color, Font* font);
 		void end();
 		void flush();
 	private:
