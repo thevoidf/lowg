@@ -31,8 +31,8 @@ namespace lowg {
 		Texture* texture;
 	public:
 		Sprite();
-		Sprite(float x, float y, float width, float height, const glm::vec4& color);
-		Sprite(float x, float y, float width, float height, Texture* texture);
+		Sprite(float x, float y, float z, float width, float height, const glm::vec4& color);
+		Sprite(float x, float y, float z, float width, float height, Texture* texture);
 		Sprite(glm::vec3 position, glm::vec2 size, glm::vec4 color);
 		~Sprite();
 
