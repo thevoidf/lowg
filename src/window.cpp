@@ -32,6 +32,7 @@ namespace lowg {
 			std::cout << "Failed to create window" << std::endl;
 			return false;
 		}
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 		glfwMakeContextCurrent(window);
 		glfwSetWindowUserPointer(window, this);
